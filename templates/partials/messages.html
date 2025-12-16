@@ -1,0 +1,28 @@
+{% load static %}
+{# Render Django messages as toasts. Include this partial near <body>. #}
+<div class="toast-stack" id="toastStack" aria-live="polite" aria-atomic="true"></div>
+<script>
+  (function(){
+    try{
+      var href = "{% static 'css/notifications.css' %}";
+      var exists = Array.prototype.some.call(document.getElementsByTagName('link'), function(l){return l.rel==='stylesheet' && l.href.indexOf('css/notifications.css')!==-1});
+      if(!exists){
+        var ln = document.createElement('link');
+        ln.rel='stylesheet'; ln.href=href; ln.media='all';
+        (document.head||document.getElementsByTagName('head')[0]).appendChild(ln);
+      }
+    }catch(e){}
+  })();
+  </script>
+<script src="{% static 'js/notifications.js' %}" defer></script>
+{% if messages %}
+  <div id="ml-messages" hidden>
+    {% for message in messages %}
+      <div class="ml-message"
+           data-title="{% if 'success' in message.tags %}تم بنجاح{% elif 'warning' in message.tags %}تنبيه{% elif 'error' in message.tags or 'danger' in message.tags %}حدث خطأ{% else %}إشعار{% endif %}"
+           data-variant="{% if 'success' in message.tags %}success{% elif 'warning' in message.tags %}warning{% elif 'error' in message.tags or 'danger' in message.tags %}error{% else %}info{% endif %}"
+           data-desc="{{ message|escapejs }}">
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}

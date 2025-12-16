@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="40" viewBox="0 0 160 40" role="img" aria-label="MyLabLink logo">
+  <defs>
+    <linearGradient id="g" x1="0" x2="1">
+      <stop offset="0%" stop-color="#0B3D91"/>
+      <stop offset="100%" stop-color="#EF4444"/>
+    </linearGradient>
+  </defs>
+  <rect rx="8" width="160" height="40" fill="none"/>
+  <g transform="translate(6,4)">
+    <circle cx="16" cy="16" r="12" fill="url(#g)" opacity="0.95" stroke="#fff" stroke-width="1" />
+    <g transform="translate(36,6)">
+      <text x="0" y="14" font-family="Tajawal, Arial, sans-serif" font-size="14" font-weight="700" fill="#0B3D91">MyLab</text>
+      <text x="0" y="30" font-family="Tajawal, Arial, sans-serif" font-size="10" font-weight="600" fill="#6B7280">Medical Lab</text>
+    </g>
+  </g>
+</svg>
