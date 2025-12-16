@@ -1,0 +1,21 @@
+:root{
+  --primary-1:#0B3B91;
+  --primary-2:#2D7DFF;
+  --bg-1:#9B6CD7;
+  --bg-2:#7B57C7;
+  --bg-3:#5B4FA5;
+  --btn-red:#EF4444;
+  --btn-red-dark:#D52F2F;
+  --input-bg:#EAF2FF;
+  --text-main:#1F2937;
+  --text-on-header:#FFFFFF;
+  --header-gradient:linear-gradient(90deg,var(--primary-1) 0%,var(--primary-2) 100%);
+  --page-gradient:linear-gradient(135deg,var(--bg-1) 0%,var(--bg-2) 50%,var(--bg-3) 100%);
+}
+.bg-page-gradient{ background:var(--page-gradient); }
+.bg-header-gradient{ background:var(--header-gradient); }
+.text-on-header{ color:var(--text-on-header); }
+.btn-primary{ background:linear-gradient(135deg,var(--btn-red),var(--btn-red-dark)); border:0; box-shadow:0 8px 20px rgba(213,47,47,.35); }
+.btn-primary:hover{ filter:brightness(1.03); transform:translateY(-1px); box-shadow:0 10px 24px rgba(213,47,47,.45); }
+.form-control,.form-select{ background:var(--input-bg); }
+.form-control:focus,.form-select:focus{ border-color:var(--primary-2); box-shadow:0 0 0 .25rem rgba(45,125,255,.25), 0 10px 30px rgba(45,125,255,.2); }
