@@ -1,0 +1,1376 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة الطبيب — MyLabLink</title>
+    <link rel="icon" type="image/x-icon" href="{% static 'images/logo.jpg' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&family=Cairo:wght@300;400;600;700;900&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Tajawal', 'Cairo', sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #FFB88C 0%, #B19CD9 35%, #6BA3D9 70%, #8BBCE6 100%);
+            background-attachment: fixed;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background Particles */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 20% 50%, rgba(255, 184, 140, 0.3), transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(177, 156, 217, 0.3), transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(107, 163, 217, 0.3), transparent 50%),
+                radial-gradient(circle at 60% 70%, rgba(139, 188, 230, 0.2), transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+            animation: floatParticles 25s ease-in-out infinite;
+        }
+
+        @keyframes floatParticles {
+
+            0%,
+            100% {
+                opacity: 0.4;
+                transform: translateY(0px) scale(1);
+            }
+
+            50% {
+                opacity: 0.7;
+                transform: translateY(-30px) scale(1.05);
+            }
+        }
+
+        .dash-grid {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 2rem;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border-radius: 2rem;
+            border: 2px solid rgba(255, 255, 255, 0.35);
+            padding: 2rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            height: fit-content;
+            position: sticky;
+            top: 2rem;
+            animation: fadeInLeft 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .main-area {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border-radius: 2rem;
+            border: 2px solid rgba(255, 255, 255, 0.35);
+            padding: 2.5rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            animation: fadeInUp 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(60px) scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .sidebar .profile {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 1.5rem;
+            margin-bottom: 2rem;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .sidebar .avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #00BFA5 0%, #00E5D0 50%, #64FFDA 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            box-shadow:
+                0 8px 20px rgba(0, 191, 165, 0.4),
+                inset 0 -2px 10px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+            border: 3px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .sidebar .avatar::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+
+            0%,
+            100% {
+                transform: translate(0, 0);
+                opacity: 0.5;
+            }
+
+            50% {
+                transform: translate(10px, 10px);
+                opacity: 0.8;
+            }
+        }
+
+        .sidebar .avatar i {
+            position: relative;
+            z-index: 2;
+            font-size: 2.2rem;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .sidebar .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            position: relative;
+            z-index: 2;
+        }
+
+        .sidebar a {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: #000000;
+            padding: 1rem 1.5rem;
+            border-radius: 1rem;
+            margin-bottom: 0.5rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-weight: 700;
+        }
+
+        .sidebar a:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(-5px);
+        }
+
+        .sidebar a.active {
+            background: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            color: white;
+        }
+
+        .card-header {
+            background: rgba(255, 255, 255, 0.1);
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+            color: #000000;
+            font-weight: 800;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #FF1744 0%, #FF5252 100%);
+            border: none;
+            box-shadow: 0 8px 20px rgba(255, 23, 68, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(255, 23, 68, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+            border: none;
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(59, 130, 246, 0.4);
+        }
+
+        .table {
+            color: white;
+        }
+
+        .table thead th {
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+            color: #000000;
+            font-weight: 800;
+        }
+
+        .table tbody tr {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .table tbody tr:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        h2,
+        h3,
+        h4,
+        h5 {
+            color: #000000;
+            font-weight: 800;
+            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
+        }
+
+        .text-muted {
+            color: #2d2d2d !important;
+            font-weight: 600 !important;
+        }
+
+        @media (max-width: 768px) {
+            .dash-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: relative;
+                top: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    {% include 'partials/messages.html' %}
+    <div class="dash-grid">
+        <!-- Enhanced Sidebar -->
+        <aside class="sidebar">
+            <div class="profile bounce-in">
+                <div class="avatar">
+                    <i class="bi bi-person-badge"></i>
+                </div>
+                <div style="flex: 1;">
+                    <div id="doctorName" style="
+                        font-weight: 900; 
+                        color: #000000;
+                        font-size: 1.1rem;
+                        margin-bottom: 0.25rem;
+                        text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                    ">جاري التحميل...</div>
+                    <div style="
+                        background: linear-gradient(135deg, #00BFA5 0%, #64FFDA 100%);
+                        color: white;
+                        font-size: 0.75rem;
+                        font-weight: 700;
+                        padding: 0.25rem 0.75rem;
+                        border-radius: 2rem;
+                        display: inline-block;
+                        box-shadow: 0 4px 15px rgba(0, 191, 165, 0.3);
+                    ">طبيب</div>
+                </div>
+            </div>
+
+            <nav class="sidebar-top">
+
+                <a href="dashboard_doctor.html" class="active slide-in">
+                    <i class="bi bi-people"></i>
+                    <span>قائمة المرضى</span>
+                </a>
+
+
+                <a href="archive.html" class="slide-in" style="animation-delay: 0.2s;">
+                    <i class="bi bi-file-earmark-text"></i>
+                    <span>التقارير</span>
+                </a>
+                <a href="notifications_doctor.html" class="slide-in" style="animation-delay: 0.3s;">
+                    <i class="bi bi-bell"></i>
+                    <span>الإشعارات</span>
+                </a>
+                <a href="#statistics" class="slide-in" style="animation-delay: 0.4s;">
+                    <i class="bi bi-graph-up"></i>
+                    <span>الإحصائيات</span>
+                </a>
+                <a href="settings_doctor.html" class="slide-in" style="animation-delay: 0.5s;">
+                    <i class="bi bi-gear"></i>
+                    <span>الإعدادات</span>
+                </a>
+                <a href="/auth.html" class="slide-in" style="animation-delay: 0.6s;"
+                    onclick="event.preventDefault(); logout();">
+                    <i class="bi bi-box-arrow-left"></i>
+                    <span>الخروج</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content Area -->
+        <section class="main-area">
+            <!-- Header with Actions -->
+            <div class="d-flex justify-content-between align-items-center mb-4 animate-up">
+                <div>
+                    <h2 class="mb-1">قائمة المرضى</h2>
+                    <p class="text-muted">آخر تحديث: اليوم، 2:45 مساءً</p>
+                </div>
+                <div class="d-flex gap-2">
+                    <a href="index.html" class="btn btn-secondary text-decoration-none d-flex align-items-center gap-2"
+                        style="background: linear-gradient(135deg, #6c757d 0%, #495057 100%); box-shadow: 0 8px 20px rgba(108, 117, 125, 0.3);">
+                        <i class="bi bi-house-fill"></i>
+                        الصفحة الرئيسية
+                    </a>
+                    <button class="btn btn-secondary" onclick="openAddResultModal()">
+                        <i class="bi bi-plus-circle"></i>
+                        إضافة نتيجة
+                    </button>
+                    <button id="alertCritical" class="btn btn-outline-danger" onclick="toggleCritical()"
+                        style="background: transparent; color: #dc3545; border-color: #dc3545;">
+                        <i class="bi bi-exclamation-triangle"></i>
+                        تنبيه حالات
+                    </button>
+                </div>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="stats-grid mb-4">
+                <div class="stat-card animate-up" style="animation-delay: 0.1s;">
+                    <div class="stat-number" data-count="85">0</div>
+                    <div class="stat-label">إجمالي المرضى</div>
+                </div>
+                <div class="stat-card animate-up" style="animation-delay: 0.2s;">
+                    <div class="stat-number badge-warning" data-count="12">0</div>
+                    <div class="stat-label">مواعيد اليوم</div>
+                </div>
+                <div class="stat-card animate-up" style="animation-delay: 0.3s;">
+                    <div class="stat-number badge-critical" data-count="3">0</div>
+                    <div class="stat-label">حالات حرجة</div>
+                </div>
+            </div>
+
+            <!-- Patients Table Card -->
+            <div class="card mb-4 animate-up" style="animation-delay: 0.4s;">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="bi bi-people-fill"></i>
+                        قائمة المرضى النشطين
+                    </h5>
+                    <div class="d-flex gap-2">
+                        <div class="input-group" style="width: 300px;">
+                            <span class="input-group-text">
+                                <i class="bi bi-search"></i>
+                            </span>
+                            <input id="searchInput" type="text" class="form-control" placeholder="البحث عن مريض...">
+                        </div>
+                        <div class="dropdown d-inline-block">
+                            <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="filterBtn"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-funnel"></i>
+                                تصفية
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="filterBtn">
+                                <li><a class="dropdown-item" href="#" onclick="applyFilter('all')">الكل</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="applyFilter('completed')">مكتمل</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="applyFilter('critical')">حرج</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="applyFilter('pending')">قيد الانتظار</a>
+                                </li>
+                                <li><a class="dropdown-item" href="#" onclick="applyFilter('draft')">مسودة</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th>اسم المريض</th>
+                                    <th>العمر</th>
+                                    <th>آخر تحليل</th>
+                                    <th>التاريخ</th>
+                                    <th>الحالة</th>
+                                    <th>الإجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="avatar me-3"
+                                                style="width: 40px; height: 40px; background: var(--gradient-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600;">
+                                                م
+                                            </div>
+                                            <div>
+                                                <div class="fw-bold">محمد أحمد علي</div>
+                                                <div class="text-muted small">ID: P001</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>45 سنة</td>
+                                    <td>تحليل دم شامل</td>
+                                    <td>اليوم</td>
+                                    <td>
+                                        <span class="badge-success">طبيعي</span>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-primary btn-sm">
+                                            <i class="bi bi-eye"></i>
+                                            عرض
+                                        </button>
+                                        <button class="btn btn-outline-secondary btn-sm">
+                                            <i class="bi bi-chat-dots"></i>
+                                            رسالة
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="avatar me-3"
+                                                style="width: 40px; height: 40px; background: var(--gradient-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600;">
+                                                ف
+                                            </div>
+                                            <div>
+                                                <div class="fw-bold">فاطمة حسن محمد</div>
+                                                <div class="text-muted small">ID: P002</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>38 سنة</td>
+                                    <td>تحاليل كيمياء</td>
+                                    <td>أمس</td>
+                                    <td>
+                                        <span class="badge-warning">يحتاج متابعة</span>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-primary btn-sm">
+                                            <i class="bi bi-eye"></i>
+                                            عرض
+                                        </button>
+                                        <button class="btn btn-outline-secondary btn-sm">
+                                            <i class="bi bi-chat-dots"></i>
+                                            رسالة
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="avatar me-3"
+                                                style="width: 40px; height: 40px; background: var(--gradient-red); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600;">
+                                                س
+                                            </div>
+                                            <div>
+                                                <div class="fw-bold">سعد عبدالله</div>
+                                                <div class="text-muted small">ID: P003</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>52 سنة</td>
+                                    <td>تحاليل الغدة الدرقية</td>
+                                    <td>3 أيام مضت</td>
+                                    <td>
+                                        <span class="badge-critical">حرج</span>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-primary btn-sm pulse">
+                                            <i class="bi bi-eye"></i>
+                                            عرض
+                                        </button>
+                                        <button class="btn btn-danger btn-sm">
+                                            <i class="bi bi-telephone"></i>
+                                            اتصل
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="avatar me-3"
+                                                style="width: 40px; height: 40px; background: var(--gradient-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600;">
+                                                ن
+                                            </div>
+                                            <div>
+                                                <div class="fw-bold">نور أحمد</div>
+                                                <div class="text-muted small">ID: P004</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>29 سنة</td>
+                                    <td>تحليل بول شامل</td>
+                                    <td>أسبوع مضى</td>
+                                    <td>
+                                        <span class="badge-success">طبيعي</span>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-primary btn-sm">
+                                            <i class="bi bi-eye"></i>
+                                            عرض
+                                        </button>
+                                        <button class="btn btn-outline-secondary btn-sm">
+                                            <i class="bi bi-chat-dots"></i>
+                                            رسالة
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Row -->
+            <div id="statistics" class="row g-4 mb-4">
+                <div class="col-md-6">
+                    <div class="card animate-up" style="animation-delay: 0.5s;">
+                        <div class="card-header">
+                            <h6 class="mb-0">
+                                <i class="bi bi-calendar-month"></i>
+                                عدد الفحوصات (شهرياً)
+                            </h6>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="doctorChart" style="max-height: 250px;"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card animate-up" style="animation-delay: 0.6s;">
+                        <div class="card-header">
+                            <h6 class="mb-0">
+                                <i class="bi bi-pie-chart"></i>
+                                توزيع أنواع التحاليل
+                            </h6>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="testsDistributionChart" style="max-height: 250px;"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activities -->
+            <div class="card animate-up" style="animation-delay: 0.7s;">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="bi bi-clock-history"></i>
+                        آخر الأنشطة
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="timeline">
+                        <div class="d-flex align-items-start mb-3">
+                            <div class="badge-success rounded-circle p-2 me-3">
+                                <i class="bi bi-check-circle"></i>
+                            </div>
+                            <div>
+                                <div class="fw-bold">تم مراجعة تحليل محمد أحمد</div>
+                                <div class="text-muted small">منذ 15 دقيقة</div>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-start mb-3">
+                            <div class="badge-warning rounded-circle p-2 me-3">
+                                <i class="bi bi-exclamation-triangle"></i>
+                            </div>
+                            <div>
+                                <div class="fw-bold">تحذير: نتيجة حرجة لسعد عبدالله</div>
+                                <div class="text-muted small">منذ 32 دقيقة</div>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-start mb-3">
+                            <div class="badge-info rounded-circle p-2 me-3">
+                                <i class="bi bi-chat-dots"></i>
+                            </div>
+                            <div>
+                                <div class="fw-bold">رسالة جديدة من فاطمة حسن</div>
+                                <div class="text-muted small">منذ ساعة</div>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-start">
+                            <div class="badge-primary rounded-circle p-2 me-3">
+                                <i class="bi bi-calendar-plus"></i>
+                            </div>
+                            <div>
+                                <div class="fw-bold">موعد جديد مجدول مع نور أحمد</div>
+                                <div class="text-muted small">منذ ساعتين</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Add Result Modal -->
+    <div class="modal fade" id="addResultModal" tabindex="-1" aria-hidden="true" style="backdrop-filter: blur(5px);">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content"
+                style="background: rgba(255, 255, 255, 0.95); border-radius: 20px; border: 1px solid rgba(0,0,0,0.1);">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title fw-bold">إضافة نتيجة تحليل جديدة</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addResultForm">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">المريض</label>
+                            <select class="form-select" id="patientSelect" required>
+                                <option value="">جاري تحميل المرضى...</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">نوع التحليل</label>
+                            <select class="form-select" id="testTypeSelect" required>
+                                <option value="">جاري التحميل...</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">النتيجة (ملاحظات/قيمة)</label>
+                            <textarea class="form-control" id="resultValue" rows="3"
+                                placeholder="أدخل تفاصيل النتيجة هنا..."></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">الحالة</label>
+                            <select class="form-select" id="resultStatus">
+                                <option value="pending">قيد الانتظار</option>
+                                <option value="completed" selected>مكتمل</option>
+                                <option value="critical">حرج (Critical)</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">ملف التقرير (PDF)</label>
+                            <input type="file" class="form-control" id="reportFile" accept="application/pdf">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">إلغاء</button>
+                    <button type="button" class="btn btn-primary" onclick="saveResult()">
+                        <i class="bi bi-save ms-1"></i>
+                        حفظ وإرسال
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        const API_BASE = 'http://127.0.0.1:8000';
+        const TOKEN_KEY = 'mylab_tokens';
+        const USER_KEY = 'mylab_user';
+
+        // Global Data
+        let allPatients = [];
+        let allResults = [];
+        let currentStatusFilter = 'all';
+        let isCriticalFilter = false;
+        let resultModal;
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            // 1. Auth Check & User Info
+            const user = recoverUserInfo();
+            if (!user) {
+                window.location.href = 'auth.html';
+                return;
+            }
+
+            // Display User Info
+            document.getElementById('doctorName').textContent = user.name || user.username || 'طبيب';
+
+            // 2. Load Dashboard Data
+            await loadDashboardData();
+
+            // 3. Initialize Charts (Empty for now until data loads, or static placeholder)
+            initCharts();
+        });
+
+        // --- Auth Helpers ---
+        function recoverUserInfo() {
+            try {
+                // Try from localStorage first
+                const storedUser = localStorage.getItem(USER_KEY);
+                if (storedUser) return JSON.parse(storedUser);
+
+                // Try to recover from token
+                const tokens = localStorage.getItem(TOKEN_KEY);
+                if (tokens) {
+                    const tokenData = JSON.parse(tokens);
+                    if (tokenData.access) {
+                        const parts = tokenData.access.split('.');
+                        if (parts.length === 3) {
+                            const payload = JSON.parse(atob(parts[1].replace(/-/g, '+').replace(/_/g, '/')));
+
+                            // Check expiry
+                            const now = Math.floor(Date.now() / 1000);
+                            if (payload.exp && payload.exp < now) {
+                                localStorage.removeItem(TOKEN_KEY);
+                                localStorage.removeItem(USER_KEY);
+                                return null;
+                            }
+
+                            const user = {
+                                name: payload.name || payload.email || 'User',
+                                role: payload.role || 'doctor',
+                                email: payload.email
+                            };
+                            localStorage.setItem(USER_KEY, JSON.stringify(user));
+                            return user;
+                        }
+                    }
+                }
+            } catch (e) {
+                console.error('Auth Error:', e);
+            }
+            return null;
+        }
+
+        // --- Data Loading ---
+        async function loadDashboardData() {
+            try {
+                const token = JSON.parse(localStorage.getItem(TOKEN_KEY)).access;
+                const headers = { 'Authorization': `Bearer ${token}` };
+
+                // A. Fetch Results (Core Data)
+                const resultsResponse = await fetch(`${API_BASE}/api/results/`, { headers });
+
+                // B. Fetch Users (to identify patients)
+                // Note: Regular user might not have permission to list all users, but Doctor usually does or we filter results.
+                // Assuming we can fetch users or derive them.
+                // B. Fetch Patients directly
+                const usersResponse = await fetch(`${API_BASE}/api/patients/`, { headers });
+
+                const testTypesResponse = await fetch(`${API_BASE}/api/test-types/`, { headers });
+
+                // Check for 401 Unauthorized (Token Expired)
+                if (resultsResponse.status === 401 || usersResponse.status === 401) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'انتهت الجلسة',
+                        text: 'يرجى تسجيل الدخول مرة أخرى للمتابعة.',
+                        confirmButtonText: 'حسناً',
+                        confirmButtonColor: '#3085d6',
+                        allowOutsideClick: false
+                    }).then(() => {
+                        logout();
+                    });
+                    return;
+                }
+
+                let patients = [];
+                let results = [];
+                let testTypes = [];
+
+                if (resultsResponse.ok) {
+                    const data = await resultsResponse.json();
+                    results = Array.isArray(data) ? data : (data.results || []);
+                }
+
+                if (usersResponse.ok) {
+                    const data = await usersResponse.json();
+                    patients = Array.isArray(data) ? data : (data.results || []);
+                }
+
+                if (testTypesResponse.ok) {
+                    const data = await testTypesResponse.json();
+                    testTypes = Array.isArray(data) ? data : (data.results || []);
+                }
+
+                // Fetch Me Profile to ensure name is correct
+                try {
+                    const meResponse = await fetch(`${API_BASE}/api/accounts/me/`, { headers });
+                    if (meResponse.ok) {
+                        const meData = await meResponse.json();
+                        const realName = (meData.first_name && meData.last_name)
+                            ? `${meData.first_name} ${meData.last_name}`
+                            : (meData.first_name || meData.username);
+                        document.getElementById('doctorName').textContent = realName;
+
+                        // Update avatar in sidebar
+                        const avatarContainer = document.querySelector('.sidebar .avatar');
+                        if (meData.avatar) {
+                            // User has a custom avatar
+                            avatarContainer.innerHTML = `<img src="${meData.avatar}" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">`;
+                        } else {
+                            // Generate avatar based on name
+                            const name = meData.first_name || meData.username || 'Doctor';
+                            const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=0D8ABC&color=fff`;
+                            avatarContainer.innerHTML = `<img src="${avatarUrl}" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">`;
+                        }
+
+                        // Update LocalStorage
+                        const currentUser = JSON.parse(localStorage.getItem(USER_KEY) || '{}');
+                        localStorage.setItem(USER_KEY, JSON.stringify({ ...currentUser, name: realName, id: meData.id }));
+                    }
+                } catch (e) { console.error('Failed to fetch profile', e); }
+
+                // Update Globals
+                allPatients = patients;
+                allResults = results;
+
+                updateStats(results, patients);
+                populatePatientSelect(patients);
+                populateTestTypeSelect(testTypes);
+
+                // Initial Render via Filter
+                applyFilters();
+
+            } catch (error) {
+                console.error('Error loading data:', error);
+                document.querySelector('.table tbody').innerHTML = `<tr><td colspan="6" class="text-center text-danger">فشل تحميل البيانات: ${error.message}</td></tr>`;
+            }
+        }
+
+        function updateStats(results, patients) {
+            // Total Patients
+            const totalPatientsEl = document.querySelector('.stat-number[data-count="85"]');
+            if (totalPatientsEl) totalPatientsEl.textContent = patients.length || 0;
+
+            // Today's Appointments
+            const today = new Date().toDateString();
+            const todayResults = results.filter(r => new Date(r.issued_at || r.created_at).toDateString() === today);
+            const todayEl = document.querySelector('.stat-number[data-count="12"]');
+            if (todayEl) todayEl.textContent = todayResults.length;
+
+            // Critical Cases
+            const critical = results.filter(r => r.status === 'critical');
+            const criticalEl = document.querySelector('.stat-number[data-count="3"]');
+            if (criticalEl) criticalEl.textContent = critical.length;
+        }
+
+        function renderPatientsTable(results, patients) {
+            const tbody = document.querySelector('table tbody');
+            tbody.innerHTML = '';
+
+            if (patients.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="text-center py-5"><p class="text-muted">لا توجد بيانات مرضى حالياً</p></td></tr>`;
+                return;
+            }
+
+            patients.forEach(patient => {
+                const user = patient.user || {};
+                const name = (user.first_name && user.last_name) ? `${user.first_name} ${user.last_name}` : (user.username || 'مريض');
+
+                // Find latest result by Patient ID
+                const patientResults = results.filter(r => (r.patient === patient.id) || (r.patient?.id === patient.id));
+                const latestResult = patientResults.sort((a, b) => new Date(b.issued_at || b.created_at) - new Date(a.issued_at || a.created_at))[0];
+
+                const row = `
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="avatar me-3" style="width: 40px; height: 40px; background: linear-gradient(135deg, #00BFA5 0%, #64FFDA 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white;">
+                                    ${name.charAt(0)}
+                                </div>
+                                <div>
+                                    <div class="fw-bold">${name}</div>
+                                    <div class="text-muted small">Patient ID: ${patient.id}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>-</td>
+                        <td>${latestResult ? (latestResult.test_type_info?.name || latestResult.test_type) : '-'}</td>
+                        <td>${latestResult ? new Date(latestResult.issued_at || latestResult.created_at).toLocaleDateString() : '-'}</td>
+                        <td>
+                            ${latestResult ? getStatusBadge(latestResult.status) : '<span class="badge bg-secondary">لا يوجد</span>'}
+                        </td>
+                        <td>
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-primary btn-sm" onclick="openAddResultModal(${patient.id})">
+                                    <i class="bi bi-plus-lg"></i> إضافة نتيجة
+                                </button>
+                                ${latestResult ? `
+                                <button class="btn btn-outline-secondary btn-sm" onclick="archiveResult(${latestResult.id})" title="أرشفة النتيجة الحالية">
+                                    <i class="bi bi-archive"></i>
+                                </button>
+                                ` : ''}
+                                ${(latestResult && (latestResult.pdf || (latestResult.files && latestResult.files.length > 0))) ? `
+                                <button class="btn btn-outline-success btn-sm" onclick="downloadResult(${latestResult.id})" title="تحميل التقرير">
+                                    <i class="bi bi-download"></i>
+                                </button>
+                                ` : ''}
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+        }
+
+        // --- Filtering Logic ---
+        function toggleCritical() {
+            isCriticalFilter = !isCriticalFilter;
+            const btn = document.getElementById('alertCritical');
+            if (isCriticalFilter) {
+                btn.style.backgroundColor = '#dc3545';
+                btn.style.color = 'white';
+                currentStatusFilter = 'critical';
+            } else {
+                btn.style.backgroundColor = 'transparent';
+                btn.style.color = '#dc3545';
+                currentStatusFilter = 'all';
+            }
+            applyFilters();
+        }
+
+        function applyFilter(status) {
+            currentStatusFilter = status;
+            // Sync toggle button
+            const btn = document.getElementById('alertCritical');
+            if (status === 'critical') {
+                isCriticalFilter = true;
+                btn.style.backgroundColor = '#dc3545';
+                btn.style.color = 'white';
+            } else {
+                isCriticalFilter = false;
+                btn.style.backgroundColor = 'transparent';
+                btn.style.color = '#dc3545';
+            }
+            applyFilters();
+        }
+
+        function applyFilters() {
+            const searchInput = document.getElementById('searchInput');
+            const searchTerm = searchInput ? searchInput.value.trim().toLowerCase() : '';
+
+            let filtered = allPatients.filter(p => {
+                const user = p.user || {};
+                const fullName = `${user.first_name || ''} ${user.last_name || ''}`.toLowerCase();
+                const userName = (user.username || user.email || '').toLowerCase();
+
+                // 1. Search Logic
+                const nameMatch = !searchTerm ||
+                    fullName.includes(searchTerm) ||
+                    userName.includes(searchTerm);
+
+                if (!nameMatch) return false;
+
+                // 2. Status Filter
+                if (currentStatusFilter === 'all') return true;
+
+                // Get latest result for patient to check status
+                const pResults = allResults.filter(r => (r.patient?.id === p.id) || (r.patient === p.id));
+                if (pResults.length === 0) return false;
+
+                const latest = pResults.sort((a, b) => new Date(b.issued_at || b.created_at) - new Date(a.issued_at || a.created_at))[0];
+
+                return latest && latest.status === currentStatusFilter;
+            });
+
+            renderPatientsTable(allResults, filtered);
+        }
+
+        // Listen for search input
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                searchInput.addEventListener('input', applyFilters);
+            }
+            // Start notification polling
+            updateNotificationBadge();
+            setInterval(updateNotificationBadge, 30000);
+        });
+
+        async function updateNotificationBadge() {
+            try {
+                const token = JSON.parse(localStorage.getItem('mylab_tokens') || '{}').access;
+                if (!token) return;
+
+                const response = await fetch(`${API_BASE}/api/notifications/`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    const results = Array.isArray(data) ? data : (data.results || []);
+                    const unreadCount = results.filter(n => !n.is_read).length;
+
+                    // Update sidebar badge
+                    // Note: Doctor dashboard sidebar might have different ID or structure? 
+                    // Looking at HTML: <span id="badgeCount" ...>0</span> inside sidebar-top
+                    const badge = document.querySelector('.sidebar-top a[href="notifications_doctor.html"] .badge');
+
+                    if (badge) {
+                        if (unreadCount > 0) {
+                            badge.textContent = unreadCount;
+                            badge.style.display = 'inline-block';
+                        } else {
+                            badge.style.display = 'none';
+                        }
+                    }
+                }
+            } catch (e) { console.error('Badge update error', e); }
+        }
+
+        function populatePatientSelect(patients) {
+            const select = document.getElementById('patientSelect');
+            if (patients.length === 0) {
+                select.innerHTML = '<option value="">لا يوجد مرضى</option>';
+                return;
+            }
+            select.innerHTML = '';
+            patients.forEach(p => {
+                const user = p.user || {}; // Handle populated user object
+                const name = (user.first_name && user.last_name) ? `${user.first_name} ${user.last_name}` : (user.username || user.email || 'مريض');
+
+                const option = document.createElement('option');
+                option.value = p.id; // Correct Patient ID
+                option.textContent = `${name} (ID: ${p.id})`;
+                select.appendChild(option);
+            });
+        }
+
+        function populateTestTypeSelect(testTypes) {
+            const select = document.getElementById('testTypeSelect');
+            if (testTypes.length === 0) {
+                select.innerHTML = '<option value="">لا يوجد أنواع متاحة</option>';
+                return;
+            }
+            select.innerHTML = '';
+            testTypes.forEach(t => {
+                const option = document.createElement('option');
+                option.value = t.id;
+                option.textContent = t.name;
+                select.appendChild(option);
+            });
+        }
+
+        // --- Charts ---
+        // --- Charts ---
+        function initCharts() {
+            // 1. Monthly Tests Chart (doctorChart)
+            const ctxHistory = document.getElementById('doctorChart');
+            if (ctxHistory) {
+                // Process data: Count tests per month for current year
+                const currentYear = new Date().getFullYear();
+                const months = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
+                const counts = new Array(12).fill(0);
+
+                if (allResults && Array.isArray(allResults)) {
+                    allResults.forEach(r => {
+                        const d = new Date(r.issued_at || r.created_at);
+                        if (d.getFullYear() === currentYear) {
+                            counts[d.getMonth()]++;
+                        }
+                    });
+                }
+
+                // Destroy existing if any (useful if re-init)
+                if (window.doctorChartInstance) window.doctorChartInstance.destroy();
+
+                window.doctorChartInstance = new Chart(ctxHistory, {
+                    type: 'line',
+                    data: {
+                        labels: months,
+                        datasets: [{
+                            label: 'عدد الفحوصات',
+                            data: counts,
+                            borderColor: '#4361ee',
+                            backgroundColor: 'rgba(67, 97, 238, 0.1)',
+                            borderWidth: 2,
+                            tension: 0.4,
+                            fill: true,
+                            pointRadius: 4,
+                            pointBackgroundColor: '#fff',
+                            pointBorderColor: '#4361ee'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                mode: 'index',
+                                intersect: false,
+                                callbacks: {
+                                    label: function (context) {
+                                        return `الفحوصات: ${context.raw}`;
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: { stepSize: 1 },
+                                grid: { borderDash: [2, 4] }
+                            },
+                            x: {
+                                grid: { display: false }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // 2. Status Distribution Chart (testsDistributionChart)
+            const ctxDist = document.getElementById('testsDistributionChart');
+            if (ctxDist) {
+                // Process data
+                let completed = 0, pending = 0, critical = 0;
+                if (allResults && Array.isArray(allResults)) {
+                    allResults.forEach(r => {
+                        if (r.status === 'completed' || r.status === 'published') completed++;
+                        else if (r.status === 'pending' || r.status === 'draft') pending++;
+                        else if (r.status === 'critical') critical++;
+                    });
+                }
+
+                // If no data, show placeholders or 0? 
+                // Better to show real data even if 0.
+
+                if (window.distChartInstance) window.distChartInstance.destroy();
+
+                window.distChartInstance = new Chart(ctxDist, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['مكتمل', 'قيد الانتظار', 'حرج'],
+                        datasets: [{
+                            data: [completed, pending, critical],
+                            backgroundColor: ['#059669', '#D97706', '#DC2626'],
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        cutout: '70%',
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    usePointStyle: true,
+                                    padding: 20,
+                                    color: '#000000', // Black text
+                                    font: {
+                                        weight: 'bold', // Bold font
+                                        size: 12
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        // --- Add Result Logic ---
+        function openAddResultModal(patientId = null) {
+            if (!resultModal) resultModal = new bootstrap.Modal(document.getElementById('addResultModal'));
+            document.getElementById('addResultForm').reset();
+            if (patientId) document.getElementById('patientSelect').value = patientId;
+            resultModal.show();
+        }
+
+        async function saveResult() {
+            try {
+                const patientId = document.getElementById('patientSelect').value;
+                const testTypeId = document.getElementById('testTypeSelect').value;
+                const resultText = document.getElementById('resultValue').value;
+                const status = document.getElementById('resultStatus').value;
+                const fileInput = document.getElementById('reportFile');
+
+                if (!patientId) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'تنبيه',
+                        text: 'يرجى اختيار المريض',
+                        confirmButtonText: 'حسناً',
+                        confirmButtonColor: '#d33'
+                    });
+                    return;
+                }
+
+                const formData = new FormData();
+                formData.append('patient', patientId);
+                formData.append('test_type', testTypeId);
+                formData.append('result_data', JSON.stringify({ notes: resultText }));
+                formData.append('status', status);
+                if (fileInput.files[0]) {
+                    formData.append('pdf', fileInput.files[0]);
+                }
+
+                const token = JSON.parse(localStorage.getItem(TOKEN_KEY)).access;
+                const response = await fetch(`${API_BASE}/api/results/`, {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${token}` },
+                    body: formData
+                });
+
+                if (response.ok) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'تم بنجاح',
+                        text: 'تم إضافة النتيجة للمريض بنجاح',
+                        confirmButtonText: 'حسناً',
+                        confirmButtonColor: '#059669',
+                        timer: 2000,
+                        showConfirmButton: false
+                    });
+                    resultModal.hide();
+                    loadDashboardData();
+                } else {
+                    const err = await response.json();
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'خطأ',
+                        text: 'فشل الحفظ: ' + JSON.stringify(err),
+                        confirmButtonText: 'موافق',
+                        confirmButtonColor: '#dc3545'
+                    });
+                }
+            } catch (e) {
+                console.error(e);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'خطأ غير متوقع',
+                    text: 'حدث خطأ أثناء الاتصال بالخادم',
+                    confirmButtonText: 'موافق',
+                    confirmButtonColor: '#dc3545'
+                });
+            }
+        }
+
+
+
+        function getStatusBadge(status) {
+            const map = {
+                'critical': '<span class="badge bg-danger">حرج</span>',
+                'completed': '<span class="badge bg-success">مكتمل</span>',
+                'pending': '<span class="badge bg-warning">قيد الانتظار</span>',
+                'archived': '<span class="badge bg-secondary">مؤرشف</span>'
+            };
+            return map[status] || '<span class="badge bg-secondary">' + status + '</span>';
+        }
+
+        async function archiveResult(resultId) {
+            const confirmed = await Swal.fire({
+                title: 'تأكيد الأرشفة',
+                text: "هل أنت متأكد من رغبتك في أرشفة هذه النتيجة؟",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'نعم، أرشفها',
+                cancelButtonText: 'إلغاء'
+            });
+
+            if (confirmed.isConfirmed) {
+                try {
+                    const token = JSON.parse(localStorage.getItem('mylab_tokens')).access;
+                    const response = await fetch(`${API_BASE}/api/results/${resultId}/archive/`, {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
+
+                    if (response.ok) {
+                        Swal.fire(
+                            'تمت الأرشفة',
+                            'تم نقل النتيجة إلى الأرشيف بنجاح.',
+                            'success'
+                        );
+                        loadDashboardData(); // Reload to reflect changes
+                    } else {
+                        Swal.fire('خطأ', 'حدث خطأ أثناء الأرشفة', 'error');
+                    }
+                } catch (e) {
+                    console.error(e);
+                    Swal.fire('خطأ', 'حدث خطأ غير متوقع', 'error');
+                }
+            }
+        }
+
+        async function downloadResult(resultId) {
+            try {
+                const token = JSON.parse(localStorage.getItem(TOKEN_KEY)).access;
+                const response = await fetch(`${API_BASE}/api/results/${resultId}/download_pdf/`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (response.ok) {
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `Result_${resultId}.pdf`;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                } else {
+                    Swal.fire('خطأ', 'لا يمكن تحميل الملف (قد لا يكون موجوداً)', 'error');
+                }
+            } catch (e) {
+                console.error(e);
+                Swal.fire('خطأ', 'حدث خطأ في الاتصال', 'error');
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('mylab_tokens');
+            localStorage.removeItem('mylab_user');
+            window.location.href = 'auth.html';
+        }
+    </script>
+</body>
+
+</html>

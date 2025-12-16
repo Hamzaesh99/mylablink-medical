@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تحقق من بريدك الإلكتروني - MyLabLink</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Tajawal', Arial, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #FFB88C 0%, #B19CD9 35%, #6BA3D9 70%, #8BBCE6 100%);
+            background-attachment: fixed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 25px;
+            padding: 50px 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .icon {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            color: white;
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+            animation: pulse 2s ease infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            font-weight: 900;
+            color: #000;
+            margin-bottom: 15px;
+        }
+
+        .email-display {
+            background: #f3f4f6;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin: 25px 0;
+            font-size: 1.1rem;
+            color: #667eea;
+            font-weight: 700;
+            word-break: break-all;
+        }
+
+        p {
+            font-size: 1.1rem;
+            color: #4b5563;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .steps {
+            background: #fef3c7;
+            border-right: 4px solid #f59e0b;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 30px 0;
+            text-align: right;
+        }
+
+        .steps h3 {
+            color: #92400e;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            font-weight: 800;
+        }
+
+        .steps ol {
+            text-align: right;
+            padding-right: 20px;
+            color: #92400e;
+        }
+
+        .steps li {
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+
+        .btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #FF1744 0%, #FF5252 50%, #FF6E40 100%);
+            color: white;
+            padding: 15px 40px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 800;
+            font-size: 1rem;
+            ;
+            margin-top: 20px;
+            box-shadow: 0 8px 25px rgba(255, 23, 68, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(255, 23, 68, 0.5);
+        }
+
+        .footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e5e7eb;
+            color: #9ca3af;
+            font-size: 0.9rem;
+        }
+
+        .timer {
+            background: #e0e7ff;
+            color: #3730a3;
+            padding: 12px 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="icon">
+            ✉️
+        </div>
+
+        <h1>تحقق من بريدك الإلكتروني</h1>
+
+        <p>شكراً لك! لقد أرسلنا رسالة تأكيد إلى:</p>
+
+        <div class="email-display" id="email-display">
+            <!-- Email will be inserted here by JavaScript -->
+        </div>
+
+        <div class="steps">
+            <h3>📋 ماذا تفعل الآن؟</h3>
+            <ol>
+                <li>افتح بريدك الإلكتروني</li>
+                <li>ابحث عن رسالة من MyLabLink</li>
+                <li>اضغط على زر "تأكيد الحساب"</li>
+                <li>سيتم إنشاء حسابك فوراً!</li>
+            </ol>
+        </div>
+
+        <div class="timer">
+            ⏰ الرابط صالح لمدة 48 ساعة
+        </div>
+
+        <p style="font-size: 0.95rem; color: #6b7280;">
+            لم تستلم الرسالة؟ تحقق من مجلد الرسائل غير المرغوب فيها (Spam)
+        </p>
+
+        <a href="/auth.html" class="btn">العودة لتسجيل الدخول</a>
+
+        <div class="footer">
+            © 2025 MyLabLink - جميع الحقوق محفوظة
+        </div>
+    </div>
+
+    <script>
+        // عرض البريد الإلكتروني من query parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const email = urlParams.get('email');
+        const emailDisplay = document.getElementById('email-display');
+
+        if (email) {
+            emailDisplay.textContent = email;
+        } else {
+            emailDisplay.textContent = 'بريدك الإلكتروني';
+        }
+    </script>
+</body>
+
+</html>

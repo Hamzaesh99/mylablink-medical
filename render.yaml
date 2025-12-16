@@ -1,0 +1,38 @@
+services:
+  - type: web
+    name: mylablink
+    env: python
+    region: oregon
+    buildCommand: "./build.sh"
+    startCommand: "cd backend && gunicorn mylablink_python.wsgi:application --workers 2 --threads 4 --timeout 120"
+    envVars:
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: False
+      - key: DJANGO_SETTINGS_MODULE
+        value: mylablink_python.settings_production
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: DATABASE_URL
+        fromDatabase:
+          name: mylablink-db
+          property: connectionString
+      - key: SECURE_SSL_REDIRECT
+        value: True
+      - key: EMAIL_BACKEND
+        value: django.core.mail.backends.smtp.EmailBackend
+      - key: EMAIL_HOST
+        value: smtp.gmail.com
+      - key: EMAIL_PORT
+        value: 587
+      # Add your email credentials in Render Dashboard
+      # - key: EMAIL_HOST_USER
+      #   value: your-email@gmail.com
+      # - key: EMAIL_HOST_PASSWORD
+      #   value: your-app-password
+    
+databases:
+  - name: mylablink-db
+    databaseName: mylablink_db
+    user: mylablink_user

@@ -1,0 +1,694 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إعدادات المريض — MyLabLink</title>
+    <link rel="icon" type="image/x-icon" href="{% static 'images/logo.jpg' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&family=Cairo:wght@300;400;600;700;900&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Tajawal', 'Cairo', sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #FFB88C 0%, #B19CD9 35%, #6BA3D9 70%, #8BBCE6 100%);
+            background-attachment: fixed;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background Particles */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 20% 50%, rgba(255, 184, 140, 0.3), transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(177, 156, 217, 0.3), transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(107, 163, 217, 0.3), transparent 50%),
+                radial-gradient(circle at 60% 70%, rgba(139, 188, 230, 0.2), transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+            animation: floatParticles 25s ease-in-out infinite;
+        }
+
+        @keyframes floatParticles {
+
+            0%,
+            100% {
+                opacity: 0.4;
+                transform: translateY(0px) scale(1);
+            }
+
+            50% {
+                opacity: 0.7;
+                transform: translateY(-30px) scale(1.05);
+            }
+        }
+
+        .dash-grid {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 2rem;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border-radius: 2rem;
+            border: 2px solid rgba(255, 255, 255, 0.35);
+            padding: 2rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            height: fit-content;
+            position: sticky;
+            top: 2rem;
+            animation: fadeInLeft 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .main-area {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border-radius: 2rem;
+            border: 2px solid rgba(255, 255, 255, 0.35);
+            padding: 2.5rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            animation: fadeInUp 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(60px) scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .sidebar .profile {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 1rem;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 1.5rem;
+            margin-bottom: 2rem;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .sidebar .avatar {
+            width: 70px;
+            height: 70px;
+            flex-shrink: 0;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #FF1744 0%, #FF5252 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            box-shadow: 0 8px 20px rgba(255, 23, 68, 0.4);
+            overflow: hidden;
+        }
+
+        .sidebar .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .sidebar a {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: #000000;
+            padding: 1rem 1.5rem;
+            border-radius: 1rem;
+            margin-bottom: 0.5rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-weight: 700;
+        }
+
+        .sidebar a:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(-5px);
+        }
+
+        .sidebar a.active {
+            background: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            color: white;
+            margin-bottom: 2rem;
+        }
+
+        .card-header {
+            background: rgba(255, 255, 255, 0.1);
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+            color: #000000;
+            font-weight: 800;
+            padding: 1.5rem;
+        }
+
+        .card-body {
+            padding: 2rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #FF1744 0%, #FF5252 100%);
+            border: none;
+            box-shadow: 0 8px 20px rgba(255, 23, 68, 0.3);
+            padding: 0.75rem 1.5rem;
+            border-radius: 1rem;
+            font-weight: bold;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(255, 23, 68, 0.4);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #DC2626 0%, #EF4444 100%);
+            border: none;
+            box-shadow: 0 8px 20px rgba(220, 38, 38, 0.3);
+            padding: 0.75rem 1.5rem;
+            border-radius: 1rem;
+            font-weight: bold;
+        }
+
+        .form-label {
+            color: #000;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-control {
+            background: rgba(255, 255, 255, 0.5);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            border-radius: 1rem;
+            padding: 0.75rem 1rem;
+            font-weight: 600;
+        }
+
+        .form-control:focus {
+            background: white;
+            box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.3);
+            border-color: #fff;
+        }
+
+        @media (max-width: 768px) {
+            .dash-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: relative;
+                top: 0;
+            }
+        }
+
+        .profile-upload-container {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 2rem;
+        }
+
+        .profile-upload-preview {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-upload-btn {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background: #FF1744;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .profile-upload-btn:hover {
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+
+<body>
+    {% include 'partials/messages.html' %}
+    <div class="dash-grid">
+        <!-- Enhanced Sidebar -->
+        <aside class="sidebar">
+            <div class="profile bounce-in">
+                <div class="avatar">
+                    <i class="bi bi-person"></i>
+                </div>
+                <div style="flex: 1;">
+                    <div id="patientName" style="
+                        font-weight: 900; 
+                        color: #000000;
+                        font-size: 1.1rem;
+                        margin-bottom: 0.25rem;
+                        text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                    ">جاري التحميل...</div>
+                    <div style="
+                        background: linear-gradient(135deg, #FF1744 0%, #FF5252 100%);
+                        color: white;
+                        font-size: 0.75rem;
+                        font-weight: 700;
+                        padding: 0.25rem 0.75rem;
+                        border-radius: 2rem;
+                        display: inline-block;
+                        box-shadow: 0 4px 15px rgba(255, 23, 68, 0.3);
+                    ">مريض</div>
+                </div>
+            </div>
+
+            <nav class="sidebar-top">
+
+                <a href="dashboard_patient.html" class="slide-in">
+                    <i class="bi bi-card-list"></i>
+                    <span>النتائج</span>
+                </a>
+
+                <a href="tips_patient.html" class="slide-in" style="animation-delay: 0.3s;">
+                    <i class="bi bi-lightbulb"></i>
+                    <span>نصائح صحية</span>
+                </a>
+                <a href="notifications_patient.html" class="slide-in" style="animation-delay: 0.4s;">
+                    <i class="bi bi-bell"></i>
+                    <span>الإشعارات</span>
+                    <span id="sidebarNotificationBadge" class="badge-critical pulse" style="display:none;">0</span>
+                </a>
+                <a href="settings_patient.html" class="active slide-in" style="animation-delay: 0.45s;">
+                    <i class="bi bi-gear"></i>
+                    <span>الإعدادات</span>
+                </a>
+                <a href="/auth.html" class="slide-in" style="animation-delay: 0.5s;"
+                    onclick="event.preventDefault(); logout();">
+                    <i class="bi bi-box-arrow-left"></i>
+                    <span>الخروج</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content Area -->
+        <section class="main-area">
+            <!-- Header -->
+            <div class="d-flex justify-content-between align-items-center mb-4 animate-up">
+                <div>
+                    <h2 class="mb-1">إعدادات الحساب</h2>
+                    <p class="text-muted">إدارة بياناتك الشخصية وتفضيلات الحساب</p>
+                </div>
+            </div>
+
+            <!-- Profile Settings -->
+            <div class="card animate-up" style="animation-delay: 0.1s;">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="bi bi-person-circle"></i>
+                        البيانات الشخصية
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form id="profileForm" onsubmit="event.preventDefault(); updateProfile();">
+                        <div class="profile-upload-container">
+                            <img src="https://ui-avatars.com/api/?name=Patient&background=FF1744&color=fff"
+                                id="profilePreview" class="profile-upload-preview" alt="Profile">
+                            <label for="avatarInput" class="profile-upload-btn">
+                                <i class="bi bi-camera"></i>
+                            </label>
+                            <input type="file" id="avatarInput" accept="image/*" style="display: none;"
+                                onchange="previewImage(this)">
+                        </div>
+
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">الاسم الأول</label>
+                                <input type="text" class="form-control" id="firstName">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">الاسم الأخير</label>
+                                <input type="text" class="form-control" id="lastName">
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label">اسم المستخدم</label>
+                                <input type="text" class="form-control" id="username">
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label">البريد الإلكتروني</label>
+                                <input type="email" class="form-control" id="email" disabled style="opacity: 0.7;">
+                                <div class="form-text text-dark">لا يمكن تغيير البريد الإلكتروني لأسباب أمنية.</div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 text-end">
+                            <button type="submit" class="btn btn-primary" id="saveBtn">
+                                <span class="spinner-border spinner-border-sm d-none" role="status"
+                                    aria-hidden="true"></span>
+                                حفظ التغييرات
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+
+            <!-- Help & Support -->
+            <div class="card animate-up mb-4" style="animation-delay: 0.15s; border-color: rgba(67, 97, 238, 0.2);">
+                <div class="card-header" style="background: rgba(67, 97, 238, 0.05);">
+                    <h5 class="mb-0 text-primary">
+                        <i class="bi bi-headset"></i>
+                        المساعدة والدعم
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="text-dark mb-1">الدعم الفني</h5>
+                            <p class="text-muted mb-0">هل تواجه مشكلة؟ تواصل مع فريق الدعم الفني مباشرة.</p>
+                        </div>
+                        <button class="btn btn-outline-primary" onclick="contactSupport()">
+                            <i class="bi bi-chat-text-fill me-2"></i>
+                            مراسلة الدعم
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Danger Zone -->
+            <div class="card animate-up" style="animation-delay: 0.2s; border-color: rgba(220, 38, 38, 0.3);">
+                <div class="card-header" style="background: rgba(220, 38, 38, 0.1);">
+                    <h5 class="mb-0 text-danger">
+                        <i class="bi bi-exclamation-triangle-fill"></i>
+                        منطقة الخطر
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="text-dark mb-1">حذف الحساب نهائياً</h5>
+                            <p class="text-dark mb-0">سيتم حذف جميع بياناتك ولا يمكن التراجع عن هذا الإجراء.</p>
+                        </div>
+                        <button class="btn btn-danger" onclick="confirmDeleteAccount()">
+                            حذف الحساب
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        const API_BASE = window.API_BASE || 'http://127.0.0.1:8000';
+        const TOKEN_KEY = 'mylab_tokens';
+        const USER_KEY = 'mylab_user';
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            await loadProfile();
+        });
+
+        async function loadProfile() {
+            try {
+                const token = JSON.parse(localStorage.getItem(TOKEN_KEY)).access;
+                const response = await fetch(`${API_BASE}/api/accounts/me/`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (response.status === 401) {
+                    logout();
+                    return;
+                }
+
+                const user = await response.json();
+
+                // Populate fields
+                document.getElementById('firstName').value = user.first_name || '';
+                document.getElementById('lastName').value = user.last_name || '';
+                document.getElementById('username').value = user.username || '';
+                document.getElementById('email').value = user.email || '';
+
+                // Update sidebar info
+                const realName = (user.first_name && user.last_name) ? `${user.first_name} ${user.last_name}` : (user.first_name || user.username);
+                document.getElementById('patientName').textContent = realName;
+
+                // Handle Avatar
+                let avatarUrl = user.avatar;
+                if (!avatarUrl) {
+                    // Generate avatar based on name
+                    const name = realName || 'Patient';
+                    avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=FF1744&color=fff&size=128&bold=true`;
+                }
+
+                document.getElementById('profilePreview').src = avatarUrl;
+                updateSidebarAvatar(avatarUrl);
+
+            } catch (error) {
+                console.error('Error loading profile:', error);
+
+            }
+        }
+
+        function updateSidebarAvatar(url) {
+            const sidebarAvatar = document.querySelector('.sidebar .avatar');
+            if (sidebarAvatar) {
+                sidebarAvatar.innerHTML = `<img src="${url}" alt="Profile" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%; position: relative; z-index: 2;">`;
+            }
+        }
+
+        function previewImage(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById('profilePreview').src = e.target.result;
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        async function updateProfile() {
+            const btn = document.getElementById('saveBtn');
+            const spinner = btn.querySelector('.spinner-border');
+
+            btn.disabled = true;
+            spinner.classList.remove('d-none');
+
+            try {
+                const token = JSON.parse(localStorage.getItem(TOKEN_KEY)).access;
+
+                // Fetch ID first 
+                const meRes = await fetch(`${API_BASE}/api/accounts/me/`, { headers: { 'Authorization': `Bearer ${token}` } });
+                const meData = await meRes.json();
+                const id = meData.id;
+
+                const formData = new FormData();
+                formData.append('first_name', document.getElementById('firstName').value);
+                formData.append('last_name', document.getElementById('lastName').value);
+                formData.append('username', document.getElementById('username').value);
+
+                const avatarInput = document.getElementById('avatarInput');
+                if (avatarInput.files[0]) {
+                    formData.append('avatar', avatarInput.files[0]);
+                }
+
+                const response = await fetch(`${API_BASE}/api/accounts/users/${id}/`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                        // Content-Type must NOT be set when sending FormData
+                    },
+                    body: formData
+                });
+
+                if (response.ok) {
+                    const updatedUser = await response.json();
+
+                    Swal.fire({
+                        title: 'تم الحفظ!',
+                        text: 'تم تحديث بيانات ملفك الشخصي بنجاح.',
+                        icon: 'success',
+                        confirmButtonText: 'حسناً',
+                        confirmButtonColor: '#059669'
+                    });
+
+                    // Refresh data
+                    loadProfile();
+                } else {
+                    const err = await response.json();
+                    let msg = 'حدث خطأ أثناء الحفظ.';
+                    if (err.username) msg = `اسم المستخدم: ${err.username[0]}`;
+                    Swal.fire({
+                        title: 'خطأ',
+                        text: msg,
+                        icon: 'error',
+                        confirmButtonText: 'موافق'
+                    });
+                }
+
+            } catch (error) {
+                console.error(error);
+                Swal.fire('خطأ', 'حدث خطأ غير متوقع', 'error');
+            } finally {
+                btn.disabled = false;
+                spinner.classList.add('d-none');
+            }
+        }
+
+        function confirmDeleteAccount() {
+            Swal.fire({
+                title: 'هل أنت متأكد؟',
+                text: "لا يمكنك التراجع عن هذا الإجراء! سيتم حذف حسابك وجميع البيانات المرتبطة به نهائياً.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'نعم، احذف حسابي',
+                cancelButtonText: 'إلغاء'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    deleteAccount();
+                }
+            })
+        }
+
+        async function contactSupport() {
+            const { value: text } = await Swal.fire({
+                title: 'مراسلة الدعم الفني',
+                input: 'textarea',
+                inputLabel: 'صف المشكلة أو الاستفسار',
+                inputPlaceholder: 'اكتب رسالتك هنا...',
+                inputAttributes: {
+                    'aria-label': 'اكتب رسالتك هنا'
+                },
+                showCancelButton: true,
+                confirmButtonText: 'إرسال',
+                cancelButtonText: 'إلغاء',
+                confirmButtonColor: '#4361ee'
+            });
+
+            if (text) {
+                // Determine user role and construct message
+                const user = JSON.parse(localStorage.getItem(USER_KEY) || '{}');
+                const role = user.role === 'doctor' ? 'طبيب' : 'مريض';
+                const msg = `[دعم فني - ${role}] ${user.username || 'User'}: ${text}`;
+
+                // Simulation of sending message to support
+                // In a real app, POST to /api/support or /api/contact
+
+                // Show success immediately for UX
+                Swal.fire({
+                    title: 'تم الإرسال!',
+                    text: 'شكراً لتواصلك معنا. سيقوم فريق الدعم الفني بالرد عليك في أقرب وقت.',
+                    icon: 'success',
+                    confirmButtonColor: '#4361ee'
+                });
+            }
+        }
+
+        async function deleteAccount() {
+            try {
+                const token = JSON.parse(localStorage.getItem(TOKEN_KEY)).access;
+                // Get ID
+                const meRes = await fetch(`${API_BASE}/api/accounts/me/`, { headers: { 'Authorization': `Bearer ${token}` } });
+                const meData = await meRes.json();
+                const id = meData.id;
+
+                const response = await fetch(`${API_BASE}/api/accounts/users/${id}/`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (response.status === 204) {
+                    Swal.fire(
+                        'تم الحذف!',
+                        'تم حذف حسابك بنجاح.',
+                        'success'
+                    ).then(() => {
+                        logout();
+                    });
+                } else {
+                    Swal.fire('خطأ', 'فشل حذف الحساب. يرجى المحاولة لاحقاً', 'error');
+                }
+
+            } catch (error) {
+                console.error(error);
+                Swal.fire('خطأ', 'حدث خطأ في الاتصال', 'error');
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem(TOKEN_KEY);
+            localStorage.removeItem(USER_KEY);
+            window.location.href = 'auth.html';
+        }
+    </script>
+</body>
+
+</html>

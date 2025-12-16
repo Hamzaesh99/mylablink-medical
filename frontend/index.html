@@ -1,0 +1,2432 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyLabLink - منصة ذكية لإدارة نتائج المختبرات الطبية</title>
+    <link rel="icon" type="image/x-icon" href="/static/images/logo.jpg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&family=Cairo:wght@300;400;600;700;900&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Tajawal', 'Cairo', sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #FFB88C 0%, #B19CD9 35%, #6BA3D9 70%, #8BBCE6 100%);
+            background-attachment: fixed;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background Particles */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 20% 50%, rgba(255, 184, 140, 0.3), transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(177, 156, 217, 0.3), transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(107, 163, 217, 0.3), transparent 50%),
+                radial-gradient(circle at 60% 70%, rgba(139, 188, 230, 0.2), transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+            animation: floatParticles 25s ease-in-out infinite;
+        }
+
+        @keyframes floatParticles {
+
+            0%,
+            100% {
+                opacity: 0.4;
+                transform: translateY(0px) scale(1);
+            }
+
+            50% {
+                opacity: 0.7;
+                transform: translateY(-30px) scale(1.05);
+            }
+        }
+
+        .container-main {
+            position: relative;
+            z-index: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Header/Navbar */
+        .navbar {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border-radius: 2rem;
+            border: 2px solid rgba(255, 255, 255, 0.35);
+            padding: 1.5rem 2rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            animation: fadeInDown 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            z-index: 1000;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes logoFloat {
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .hero-logo {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            animation: logoFloat 3s ease-in-out infinite;
+            transition: all 0.3s ease;
+        }
+
+        .hero-logo:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .navbar .brand {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: #000000;
+            text-shadow: 0 1px 3px rgba(255, 255, 255, 0.5);
+        }
+
+        .navbar .brand img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            object-fit: cover;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .navbar .brand img:hover {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .navbar .nav-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .navbar .nav-actions a {
+            background: linear-gradient(135deg, #FF9E6D 0%, #FFB88C 100%);
+            color: white;
+            padding: 0.75rem 2rem;
+            border-radius: 1rem;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(255, 158, 109, 0.3);
+        }
+
+        .navbar .nav-actions a:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(255, 158, 109, 0.4);
+        }
+
+        /* Hero Section */
+        .hero-section {
+            text-align: center;
+            padding: 4rem 2rem;
+            margin-bottom: 4rem;
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border-radius: 2.5rem;
+            border: 2px solid rgba(255, 255, 255, 0.35);
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.2);
+            animation: fadeInUp 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Hero Background Image Overlay */
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('/static/images/v1.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0.15;
+            z-index: 0;
+            border-radius: 2.5rem;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .hero-section:hover::before {
+            opacity: 0.25;
+            transform: scale(1.05);
+        }
+
+        /* Ensure content is above the background */
+        .hero-section>* {
+            position: relative;
+            z-index: 1;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(60px) scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .hero-section h1 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: #000000;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 2px 8px rgba(255, 255, 255, 0.8);
+        }
+
+        .hero-section p {
+            font-size: 1.3rem;
+            color: #1a1a1a;
+            margin-bottom: 2rem;
+            font-weight: 600;
+        }
+
+        .hero-section .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .hero-section .btn-primary {
+            background: linear-gradient(135deg, #FF9E6D 0%, #FF8A4C 100%);
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 1.25rem;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(255, 158, 109, 0.4);
+            border: none;
+            cursor: pointer;
+        }
+
+        .hero-section .btn-primary:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(255, 158, 109, 0.5);
+        }
+
+        .hero-section .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 1.25rem;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .hero-section .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-5px);
+        }
+
+        /* Features Section */
+        .features-section {
+            margin-bottom: 4rem;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: #000000;
+            margin-bottom: 1rem;
+            text-shadow: 0 1px 3px rgba(255, 255, 255, 0.5);
+        }
+
+        .section-title p {
+            font-size: 1.2rem;
+            color: #1a1a1a;
+            font-weight: 600;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border-radius: 2rem;
+            border: 2px solid rgba(255, 255, 255, 0.35);
+            padding: 2.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.25);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .feature-card .icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            background: linear-gradient(135deg, #B19CD9 0%, #9980C9 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: white;
+            box-shadow: 0 10px 30px rgba(177, 156, 217, 0.4);
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #000000;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card p {
+            font-size: 1rem;
+            color: #1a1a1a;
+            line-height: 1.6;
+            font-weight: 500;
+        }
+
+        /* Stats Section */
+        .stats-section {
+            margin-bottom: 4rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border-radius: 2rem;
+            border: 2px solid rgba(255, 255, 255, 0.35);
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.25);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 900;
+            color: #000000;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 1px 3px rgba(255, 255, 255, 0.5);
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            color: #1a1a1a;
+            font-weight: 700;
+        }
+
+        /* How It Works Section */
+        .how-it-works {
+            margin-bottom: 4rem;
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .step-card {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border-radius: 2rem;
+            border: 2px solid rgba(255, 255, 255, 0.35);
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            position: relative;
+        }
+
+        .step-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.25);
+        }
+
+        .step-number {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 1.5rem;
+            background: linear-gradient(135deg, #6BA3D9 0%, #4B8BC9 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: white;
+            box-shadow: 0 10px 30px rgba(107, 163, 217, 0.4);
+        }
+
+        .step-card h4 {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #000000;
+            margin-bottom: 0.75rem;
+        }
+
+        .step-card p {
+            font-size: 1rem;
+            color: #1a1a1a;
+            font-weight: 500;
+        }
+
+        /* Testimonials Section */
+        .testimonials-section {
+            margin-bottom: 4rem;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .testimonial-card {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border-radius: 2rem;
+            border: 2px solid rgba(255, 255, 255, 0.35);
+            padding: 2.5rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.25);
+        }
+
+        .testimonial-stars {
+            color: #FFD700;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .testimonial-text {
+            font-size: 1.1rem;
+            color: #1a1a1a;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+            font-style: italic;
+            font-weight: 500;
+        }
+
+        .testimonial-author {
+            font-weight: 800;
+            color: #000000;
+            margin-bottom: 0.25rem;
+        }
+
+        .testimonial-role {
+            font-size: 0.9rem;
+            color: #2d2d2d;
+            font-weight: 600;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border-radius: 2.5rem;
+            border: 2px solid rgba(255, 255, 255, 0.35);
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.2);
+            margin-bottom: 2rem;
+        }
+
+        .cta-section h3 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: #000000;
+            margin-bottom: 1rem;
+            text-shadow: 0 1px 3px rgba(255, 255, 255, 0.5);
+        }
+
+        .cta-section p {
+            font-size: 1.2rem;
+            color: #1a1a1a;
+            margin-bottom: 2rem;
+            font-weight: 600;
+        }
+
+        /* Red CTA Button */
+        .btn-cta-red {
+            background: linear-gradient(135deg, #FF1744 0%, #F50057 50%, #FF5252 100%);
+            color: white;
+            font-size: 1.3rem;
+            font-weight: 800;
+            padding: 1.2rem 3rem;
+            border: none;
+            border-radius: 2rem;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(255, 23, 68, 0.4);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-cta-red:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 25px 60px rgba(255, 23, 68, 0.6);
+        }
+
+        .btn-cta-red:active {
+            transform: translateY(-2px) scale(1.02);
+        }
+
+        /* Shine effect */
+        .btn-shine {
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-cta-red:hover .btn-shine {
+            left: 100%;
+        }
+
+        /* Pulse animation */
+        @keyframes pulse-red {
+
+            0%,
+            100% {
+                box-shadow: 0 15px 40px rgba(255, 23, 68, 0.4);
+            }
+
+            50% {
+                box-shadow: 0 15px 40px rgba(255, 23, 68, 0.7), 0 0 0 15px rgba(255, 23, 68, 0.1);
+            }
+        }
+
+        .btn-cta-red {
+            animation: pulse-red 2s infinite;
+        }
+
+        /* CTA Stats */
+        .cta-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease forwards;
+            animation-delay: 0.3s;
+        }
+
+        .cta-stat-item {
+            text-align: center;
+        }
+
+        .cta-stat-number {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: #FF1744;
+            text-shadow: 0 2px 10px rgba(255, 23, 68, 0.3);
+        }
+
+        .cta-stat-label {
+            font-size: 1rem;
+            color: #1a1a1a;
+            font-weight: 700;
+            margin-top: 0.5rem;
+        }
+
+        /* Health News Section */
+        .health-news-section {
+            margin-bottom: 4rem;
+        }
+
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+
+        .news-card {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border-radius: 2rem;
+            border: 2px solid rgba(255, 255, 255, 0.35);
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .news-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.25);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .news-card-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .news-card:hover .news-card-image {
+            transform: scale(1.1);
+        }
+
+        .news-card-content {
+            padding: 1.5rem;
+        }
+
+        .news-card-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: linear-gradient(135deg, #FF1744 0%, #FF5252 100%);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(255, 23, 68, 0.4);
+            z-index: 10;
+        }
+
+        .news-card-date {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            color: #2d2d2d;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+        }
+
+        .news-card-title {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #000000;
+            margin-bottom: 0.75rem;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .news-card-description {
+            font-size: 0.95rem;
+            color: #1a1a1a;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            font-weight: 500;
+        }
+
+        .news-card-source {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .news-source-name {
+            font-size: 0.85rem;
+            color: #2d2d2d;
+            font-weight: 700;
+        }
+
+        .news-read-more {
+            color: #FF1744;
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .news-read-more:hover {
+            gap: 0.75rem;
+        }
+
+        /* Skeleton Loaders */
+        .news-skeleton {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(40px);
+            border-radius: 2rem;
+            border: 2px solid rgba(255, 255, 255, 0.35);
+            overflow: hidden;
+            padding: 1.5rem;
+        }
+
+        .skeleton-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.1) 25%, rgba(255, 255, 255, 0.3) 50%, rgba(255, 255, 255, 0.1) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            border-radius: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .skeleton-text {
+            height: 20px;
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.1) 25%, rgba(255, 255, 255, 0.3) 50%, rgba(255, 255, 255, 0.1) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            border-radius: 0.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .skeleton-text.short {
+            width: 60%;
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: -200% 0;
+            }
+
+            100% {
+                background-position: 200% 0;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-section h1 {
+                font-size: 2.5rem;
+            }
+
+            .section-title h2 {
+                font-size: 2rem;
+            }
+
+            .features-grid,
+            .stats-grid,
+            .steps-grid,
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .navbar .nav-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+
+        /* User Nav Actions (when logged in) */
+        .user-nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 1rem;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            font-size: 0.95rem;
+        }
+
+        .nav-btn-dashboard {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-btn-dashboard::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .nav-btn-dashboard:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .nav-btn-dashboard:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 12px 30px rgba(102, 126, 234, 0.5);
+        }
+
+        .nav-btn-notifications {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: #333;
+            position: relative;
+        }
+
+        .nav-btn-notifications:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-3px);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: linear-gradient(135deg, #FF1744, #FF5252);
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 800;
+            min-width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(255, 23, 68, 0.4);
+            animation: pulse-badge 2s infinite;
+        }
+
+        @keyframes pulse-badge {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        .nav-btn-logout {
+            background: rgba(255, 23, 68, 0.1);
+            border: 2px solid rgba(255, 23, 68, 0.3);
+            color: #FF1744;
+        }
+
+        .nav-btn-logout:hover {
+            background: rgba(255, 23, 68, 0.2);
+            transform: translateY(-3px);
+        }
+
+        .user-greeting {
+            color: #333;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 0.75rem;
+        }
+
+        /* Welcome Toast Message */
+        .welcome-toast {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1.5rem 2rem;
+            border-radius: 1.5rem;
+            box-shadow: 0 20px 60px rgba(102, 126, 234, 0.4);
+            z-index: 10000;
+            animation: slideInRight 0.5s ease, fadeOut 0.5s ease 4.5s forwards;
+            max-width: 400px;
+        }
+
+        .welcome-toast h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .welcome-toast p {
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+
+        .welcome-toast .close-btn {
+            position: absolute;
+            top: 0.75rem;
+            left: 0.75rem;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .welcome-toast .close-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeOut {
+            to {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+        }
+
+        /* Red Dot Notification Badge */
+        .notification-red-dot {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 12px;
+            height: 12px;
+            background: #FF1744;
+            border-radius: 50%;
+            border: 2px solid white;
+            box-shadow: 0 2px 8px rgba(255, 23, 68, 0.5);
+            animation: pulse-dot 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-dot {
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(1.2);
+                opacity: 0.8;
+            }
+        }
+
+        /* Notifications Dropdown */
+        .notifications-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 0.5rem;
+            background: white;
+            border-radius: 1.5rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            min-width: 320px;
+            max-height: 400px;
+            overflow-y: auto;
+            display: none;
+            z-index: 1000;
+        }
+
+        .notifications-dropdown.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .notifications-header {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #eee;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .notification-item {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #f0f0f0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .notification-item:hover {
+            background: #f8f9fa;
+        }
+
+        .notification-item.unread {
+            background: rgba(102, 126, 234, 0.05);
+            border-right: 4px solid #667eea;
+        }
+
+        .notification-title {
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 0.25rem;
+        }
+
+        .notification-text {
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        .notification-time {
+            font-size: 0.75rem;
+            color: #999;
+            margin-top: 0.25rem;
+        }
+
+        .notifications-empty {
+            padding: 2rem;
+            text-align: center;
+            color: #999;
+        }
+
+        /* Support Section Styles */
+        .support-actions {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-whatsapp {
+            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+            box-shadow: 0 10px 20px rgba(37, 211, 102, 0.3);
+        }
+
+        .btn-email {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .support-features {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 3rem;
+            color: rgba(255, 255, 255, 0.9);
+            flex-wrap: wrap;
+        }
+
+        .support-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .support-item i {
+            font-size: 1.5rem;
+            color: #fff;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 1rem;
+            border-radius: 50%;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Star Rating in Form */
+        .star-rating {
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: flex-end;
+            gap: 0.5rem;
+        }
+
+        .star-rating input {
+            display: none;
+        }
+
+        .star-rating label {
+            color: #ddd;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .star-rating input:checked~label,
+        .star-rating label:hover,
+        .star-rating label:hover~label {
+            color: #ffd700;
+        }
+
+        /* Review Button */
+        #addReviewBtn {
+            margin-top: 2rem;
+            padding: 0.8rem 2rem;
+            font-size: 1rem;
+            border-radius: 50px;
+            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+            color: white;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        #addReviewBtn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.6);
+        }
+
+        #addReviewBtn i {
+            font-size: 1.1rem;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            /* Black with opacity */
+            backdrop-filter: blur(5px);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background: rgba(255, 255, 255, 0.95);
+            margin: 10% auto;
+            padding: 2.5rem;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            position: relative;
+            animation: slideUp 0.4s ease;
+            text-align: right;
+            /* RTL support */
+        }
+
+        .modal h3 {
+            margin-top: 0;
+            color: #1e293b;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .close {
+            position: absolute;
+            left: 20px;
+            top: 15px;
+            color: #94a3b8;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .close:hover {
+            color: #ef4444;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #475569;
+            font-weight: 500;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            background: #f8fafc;
+            resize: vertical;
+            font-family: inherit;
+            transition: border-color 0.2s;
+            outline: none;
+        }
+
+        textarea:focus {
+            border-color: #6366f1;
+            background: #fff;
+        }
+
+        .modal .btn-primary {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.1rem;
+            border-radius: 12px;
+            margin-top: 1rem;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Custom Toast Notification */
+        .custom-toast {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-100px);
+            background: rgba(255, 255, 255, 0.95);
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55), opacity 0.4s;
+            opacity: 0;
+            pointer-events: none;
+            min-width: 300px;
+            direction: rtl;
+        }
+
+        .custom-toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .custom-toast.success {
+            border-right: 5px solid #10b981;
+        }
+
+        .custom-toast.error {
+            border-right: 5px solid #ef4444;
+        }
+
+        .custom-toast i {
+            font-size: 1.5rem;
+        }
+
+        .custom-toast.success i {
+            color: #10b981;
+        }
+
+        .custom-toast.error i {
+            color: #ef4444;
+        }
+
+        .custom-toast p {
+            margin: 0;
+            color: #1e293b;
+            font-weight: 500;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Welcome Toast (for first-time login) -->
+    <div id="welcome-toast" class="welcome-toast" style="display: none;">
+        <button class="close-btn" onclick="closeWelcomeToast()">&times;</button>
+        <h3>🎉 مرحباً بك!</h3>
+        <p id="welcome-message">نحن سعداء بانضمامك إلى MyLabLink</p>
+    </div>
+
+    <div class="container-main">
+        <!-- Navbar -->
+        <nav class="navbar">
+            <div class="nav-actions">
+                <div class="brand">
+                    <img src="/static/images/logo.jpg" alt="MyLabLink" data-fallback="/static/images/mylab.png"
+                        onerror="this.onerror=null; this.src=this.dataset.fallback;">
+                    <span>MyLabLink</span>
+                </div>
+
+                <!-- Guest Nav (not logged in) -->
+                <div id="guest-nav">
+                    <a href="/auth.html" class="nav-btn nav-btn-dashboard">
+                        <i class="fas fa-sign-in-alt"></i> تسجيل الدخول
+                    </a>
+                </div>
+
+                <!-- User Nav (logged in) -->
+                <div id="user-nav" class="user-nav-actions" style="display: none;">
+                    <span id="user-greeting" class="user-greeting"></span>
+
+                    <!-- Notifications Button -->
+                    <div style="position: relative;">
+                        <button id="notifications-btn" class="nav-btn nav-btn-notifications">
+                            <i class="fas fa-bell"></i>
+                            <span id="notificationRedDot" class="notification-red-dot" style="display: none;"></span>
+                        </button>
+                        <!-- Notifications Dropdown -->
+                        <div id="notifications-dropdown" class="notifications-dropdown">
+                            <div class="notifications-header">
+                                <i class="fas fa-bell"></i> الإشعارات
+                            </div>
+                            <div id="notifications-list">
+                                <div class="notifications-empty">
+                                    <i class="fas fa-inbox"
+                                        style="font-size: 2rem; margin-bottom: 0.5rem; color: #ccc;"></i>
+                                    <p>لا توجد إشعارات جديدة</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dashboard Button -->
+                    <a href="/patient/dashboard/" id="dashboard-link" class="nav-btn nav-btn-dashboard">
+                        <i class="fas fa-tachometer-alt"></i> لوحة التحكم
+                    </a>
+
+                    <!-- Archive Button (Doctors Only) -->
+                    <a href="/archive.html" id="archive-link" class="nav-btn"
+                        style="display: none; background: linear-gradient(135deg, #10B981 0%, #059669 100%); color: white; margin-right: 0.5rem; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);">
+                        <i class="fas fa-archive"></i> الأرشيف الطبي
+                    </a>
+
+                    <!-- Logout Button -->
+                    <button id="logout-btn" class="nav-btn nav-btn-logout">
+                        <i class="fas fa-sign-out-alt"></i> خروج
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <img src="/static/images/logo.jpg" alt="MyLabLink Logo" class="hero-logo"
+                    data-fallback="/static/images/mylab.png"
+                    onerror="this.onerror=null; this.src=this.dataset.fallback;">
+            </div>
+            <h1>منصة ذكية لإدارة نتائج المختبرات الطبية</h1>
+            <p>نظام شامل وآمن لإدارة ومتابعة نتائج التحاليل الطبية للمرضى والأطباء</p>
+            <div class="cta-buttons" id="hero-cta-buttons">
+                <a href="/auth.html" class="btn-primary" id="hero-cta-primary">
+                    <i class="fas fa-rocket"></i> ابدأ الآن مجاناً
+                </a>
+                <a href="#features" class="btn-secondary">
+                    <i class="fas fa-info-circle"></i> تعرف على المزيد
+                </a>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section id="features" class="features-section">
+            <div class="section-title">
+                <h2>مميزات النظام</h2>
+                <p>اكتشف المزايا المتقدمة التي تجعل MyLabLink الخيار الأمثل لك</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>أمان عالي</h3>
+                    <p>حماية متقدمة لبياناتك الطبية مع تشفير من الدرجة العسكرية وأعلى معايير الأمان</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3>سرعة في النتائج</h3>
+                    <p>احصل على نتائج تحاليلك في أسرع وقت ممكن مع إشعارات فورية عند صدور النتائج</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>تقارير مفصلة</h3>
+                    <p>رسوم بيانية وتحليلات متقدمة لتتبع حالتك الصحية عبر الزمن مع إمكانية تحميل PDF</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Statistics Section -->
+        <section class="stats-section">
+            <div class="section-title" style="margin-bottom: 3rem; color: white;">
+                <h2>الهدف الأولي للوصول إلى هذه الأرقام</h2>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" data-count="5000">0</div>
+                    <div class="stat-label">مريض سعيد</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" data-count="150">0</div>
+                    <div class="stat-label">طبيب متخصص</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" data-count="25000">0</div>
+                    <div class="stat-label">تحليل تم إجراؤه</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" data-count="99">0</div>
+                    <div class="stat-label">% معدل الرضا</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- How It Works Section -->
+        <section class="how-it-works">
+            <div class="section-title">
+                <h2>كيف يعمل النظام؟</h2>
+                <p>خطوات بسيطة لاستخدام MyLabLink</p>
+            </div>
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h4>التسجيل</h4>
+                    <p>أنشئ حسابك كطبيب أو مريض بخطوات بسيطة وآمنة</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h4>إجراء التحاليل</h4>
+                    <p>قم بإجراء التحاليل المطلوبة في المختبر المتعاون معنا</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h4>استلام النتائج</h4>
+                    <p>احصل على نتائجك فور إتمام التحليل مع إشعارات فورية</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">4</div>
+                    <h4>المتابعة</h4>
+                    <p>تابع حالتك الصحية مع طبيبك من خلال المنصة</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section class="testimonials-section">
+            <div class="section-title">
+                <h2>آراء المستخدمين</h2>
+                <p>ماذا يقول عملاؤنا عن MyLabLink</p>
+            </div>
+
+            <div class="testimonials-grid" id="testimonialsList">
+                <!-- Loading State -->
+                <div class="testimonial-card">
+                    <p>جاري تحميل الآراء...</p>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 2rem;">
+                <button onclick="openTestimonialModal()" class="btn-secondary" id="addReviewBtn" style="display: none;">
+                    <i class="fas fa-edit"></i> شاركنا رأيك
+                </button>
+            </div>
+        </section>
+
+        <!-- Add Testimonial Modal -->
+        <div id="testimonialModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <span class="close" onclick="closeTestimonialModal()">&times;</span>
+                <h3>شاركنا تجربتك</h3>
+                <form id="testimonialForm">
+                    <div class="form-group">
+                        <label>تقييمك</label>
+                        <div class="star-rating">
+                            <input type="radio" id="star5" name="rating" value="5" checked /><label for="star5"
+                                title="5 stars">★</label>
+                            <input type="radio" id="star4" name="rating" value="4" /><label for="star4"
+                                title="4 stars">★</label>
+                            <input type="radio" id="star3" name="rating" value="3" /><label for="star3"
+                                title="3 stars">★</label>
+                            <input type="radio" id="star2" name="rating" value="2" /><label for="star2"
+                                title="2 stars">★</label>
+                            <input type="radio" id="star1" name="rating" value="1" /><label for="star1"
+                                title="1 star">★</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>تعليقك</label>
+                        <textarea id="testimonialContent" rows="4" required placeholder="اكتب رأيك هنا..."
+                            style="width: 100%; padding: 0.5rem;"></textarea>
+                    </div>
+                    <button type="submit" class="btn-primary" style="width: 100%;">إرسال الرأي</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Health News Section -->
+        <section class="health-news-section">
+            <div class="section-title">
+                <h2>📰 الأخبار الصحية اليومية</h2>
+                <p>آخر الأخبار والتحديثات العالمية في مجال الصحة والطب</p>
+            </div>
+
+            <div class="news-grid" id="healthNewsGrid">
+                <!-- News will be dynamically loaded here -->
+                <div class="news-skeleton">
+                    <div class="skeleton-image"></div>
+                    <div class="skeleton-text"></div>
+                    <div class="skeleton-text short"></div>
+                </div>
+                <div class="news-skeleton">
+                    <div class="skeleton-image"></div>
+                    <div class="skeleton-text"></div>
+                    <div class="skeleton-text short"></div>
+                </div>
+                <div class="news-skeleton">
+                    <div class="skeleton-image"></div>
+                    <div class="skeleton-text"></div>
+                    <div class="skeleton-text short"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Technical Support Section -->
+        <section class="cta-section support-section" id="support">
+            <h3>🛠️ الدعم الفني والمساعدة</h3>
+            <p>هل تواجه مشكلة تقنية أو لديك استفسار؟ فريقنا جاهز لمساعدتك على مدار الساعة.</p>
+
+            <div class="support-actions">
+                <a href="mailto:mylablinknh@gmail.com" class="btn-cta-red btn-email"
+                    style="color: black !important; font-weight: bold;">
+                    <i class="fas fa-envelope" style="color: black;"></i> راسلنا عبر البريد
+                </a>
+            </div>
+
+            <div class="support-features">
+                <div class="support-item">
+                    <i class="fas fa-headset"></i>
+                    <span>دعم فني 24/7</span>
+                </div>
+                <div class="support-item">
+                    <i class="fas fa-check-circle"></i>
+                    <span>حلول فورية</span>
+                </div>
+                <div class="support-item">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>خصوصية وأمان</span>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // API Configuration
+        const API_BASE = window.API_BASE || 'http://127.0.0.1:8000';
+        const TOKEN_KEY = 'mylab_tokens';
+        const USER_KEY = 'mylab_user';
+
+        // Get user info from localStorage
+        function getUserInfo() {
+            let raw = localStorage.getItem(USER_KEY);
+            if (!raw) {
+                // Try to recover from token if user info is missing
+                const recovered = recoverUserInfo();
+                if (recovered) return recovered;
+                return null;
+            }
+            try { return JSON.parse(raw); } catch (e) { return null; }
+        }
+
+        // Recover user info from token if missing
+        function recoverUserInfo() {
+            try {
+                const tokens = localStorage.getItem(TOKEN_KEY);
+                if (tokens) {
+                    const tokenData = JSON.parse(tokens);
+                    if (tokenData.access) {
+                        const parts = tokenData.access.split('.');
+                        if (parts.length === 3) {
+                            const payloadRaw = atob(parts[1].replace(/-/g, '+').replace(/_/g, '/'));
+                            const payload = JSON.parse(decodeURIComponent(escape(payloadRaw)));
+
+                            console.log('🔍 Token Payload:', payload); // Debugging
+
+                            const user = {
+                                email: payload.email || payload.user_id,
+                                role: payload.role || 'patient',
+                                name: payload.name || payload.first_name || payload.email || payload.sub || 'مستخدم'
+                            };
+                            console.log('🔄 User info recovered from token:', user);
+                            localStorage.setItem(USER_KEY, JSON.stringify(user));
+                            return user;
+                        }
+                    }
+                }
+            } catch (e) {
+                console.error('Failed to recover user info from token:', e);
+            }
+            return null;
+        }
+
+        // Check if user is logged in
+        function isLoggedIn() {
+            const tokens = localStorage.getItem(TOKEN_KEY);
+            return !!tokens;
+        }
+
+        // Logout function
+        function logout() {
+            localStorage.removeItem(TOKEN_KEY);
+            localStorage.removeItem(USER_KEY);
+            window.location.href = '/auth.html';
+        }
+
+        // Close welcome toast
+        function closeWelcomeToast() {
+            const toast = document.getElementById('welcome-toast');
+            if (toast) toast.style.display = 'none';
+            sessionStorage.removeItem('show_welcome');
+            sessionStorage.removeItem('user_name');
+        }
+
+        // Show welcome toast
+        function showWelcomeToast() {
+            const showWelcome = sessionStorage.getItem('show_welcome');
+            const userName = sessionStorage.getItem('user_name');
+
+            if (showWelcome === 'true') {
+                const toast = document.getElementById('welcome-toast');
+                const message = document.getElementById('welcome-message');
+
+                if (toast) {
+                    if (message && userName) {
+                        message.textContent = `مرحباً ${userName}! نحن سعداء بانضمامك إلى MyLabLink`;
+                    }
+                    toast.style.display = 'block';
+
+                    // Auto-hide after 5 seconds
+                    setTimeout(() => {
+                        closeWelcomeToast();
+                    }, 5000);
+                }
+            }
+        }
+
+        // Update navbar based on login status
+        async function updateNavbar() {
+            const guestNav = document.getElementById('guest-nav');
+            const userNav = document.getElementById('user-nav');
+            const userGreeting = document.getElementById('user-greeting');
+            const dashboardLink = document.getElementById('dashboard-link');
+            const archiveLink = document.getElementById('archive-link');
+
+            console.log('🔄 updateNavbar executing...');
+
+            if (isLoggedIn()) {
+                let user = getUserInfo();
+                console.log('👤 User logged in (Local):', user);
+
+                // Show user nav, hide guest nav
+                if (guestNav) guestNav.style.display = 'none';
+                if (userNav) userNav.style.display = 'flex';
+
+                // إظهار زر "شاركنا رأيك" للمسجلين
+                const reviewBtn = document.getElementById('addReviewBtn');
+                if (reviewBtn) reviewBtn.style.display = 'inline-block';
+
+                if (userGreeting && user) {
+                    const name = user.name || user.email?.split('@')[0] || 'المستخدم';
+                    userGreeting.textContent = `مرحباً، ${name}`;
+                }
+
+                // 2. تحديث الزر الرئيسي (Hero Button)
+                const heroBtn = document.getElementById('hero-cta-primary');
+                if (heroBtn) {
+                    heroBtn.innerHTML = '<i class="fas fa-newspaper"></i> توجه إلى الأخبار اليومية';
+                    heroBtn.href = '#healthNewsGrid'; // ID قسم الأخبار
+                    // إضافة scroll سلس عند الضغط
+                    heroBtn.onclick = function (e) {
+                        e.preventDefault();
+                        document.getElementById('healthNewsGrid').scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'center'
+                        });
+                    };
+                }
+
+                // 3. Fetch fresh data from API (Accurate)
+                try {
+                    const tokens = JSON.parse(localStorage.getItem(TOKEN_KEY) || '{}');
+                    if (tokens.access) {
+                        const res = await fetch(`${API_BASE}/api/accounts/me/`, {
+                            headers: { 'Authorization': `Bearer ${tokens.access}` }
+                        });
+
+                        if (res.ok) {
+                            const freshUser = await res.json();
+                            // Construct real name
+                            const realName = (freshUser.first_name && freshUser.last_name)
+                                ? `${freshUser.first_name} ${freshUser.last_name}`
+                                : (freshUser.first_name || freshUser.username);
+
+                            // Update UI
+                            if (userGreeting) userGreeting.textContent = `مرحباً، ${realName}`;
+
+                            // Update LocalUser object and Storage
+                            user = {
+                                ...user,
+                                name: realName,
+                                email: freshUser.email,
+                                role: freshUser.role,
+                                id: freshUser.id
+                            };
+                            localStorage.setItem(USER_KEY, JSON.stringify(user));
+                            console.log('✅ User data refreshed from API:', user);
+                        }
+                    }
+                } catch (e) {
+                    console.error('Failed to refresh user data:', e);
+                }
+
+                if (!user) {
+                    console.error('User info not found in localStorage');
+                    return;
+                }
+
+                // تخصيص الأزرار حسب الدور
+                const role = (user.role || '').toLowerCase(); // توحيد حالة الأحرف
+
+                if (role === 'doctor') {
+                    // 👨‍⚕️ طبيب
+                    if (dashboardLink) {
+                        dashboardLink.href = '/dashboard_doctor.html'; // رابط لوحة الطبيب
+                        dashboardLink.innerHTML = '<i class="fas fa-stethoscope"></i> لوحة الطبيب'; // أيقونة السماعة الطبية
+                        dashboardLink.style.background = 'linear-gradient(135deg, #6366f1 0%, #4338ca 100%)'; // لون نيلي فخم (Indigo)
+                        dashboardLink.style.boxShadow = '0 8px 25px rgba(99, 102, 241, 0.5)';
+                        dashboardLink.style.border = '1px solid rgba(255, 255, 255, 0.2)';
+                        dashboardLink.title = 'الدخول إلى لوحة تحكم الطبيب';
+                    }
+
+                    // إظهار زر الأرشيف (يظهر بجانب زر اللوحة)
+                    if (archiveLink) {
+                        archiveLink.style.display = 'inline-flex';
+                    }
+
+                } else if (role === 'admin') {
+                    // 🛡️ مسؤول
+                    if (dashboardLink) {
+                        dashboardLink.href = '/admin/dashboard.html';
+                        dashboardLink.innerHTML = '<i class="fas fa-shield-alt"></i> لوحة الإدارة';
+                        dashboardLink.style.background = 'linear-gradient(135deg, #FF1744 0%, #FF5252 100%)';
+                        dashboardLink.style.boxShadow = '0 8px 20px rgba(255, 23, 68, 0.4)';
+                        dashboardLink.title = 'لوحة تحكم الإدارة';
+                    }
+                    if (archiveLink) archiveLink.style.display = 'none'; // إخفاء الأرشيف للمسؤول إذا لم يكن مطلوباً (أو إظهاره إذا أردت)
+
+                } else {
+                    // 💓 مريض (أو أي دور آخر)
+                    if (dashboardLink) {
+                        dashboardLink.href = '/dashboard_patient.html'; // رابط لوحة المريض
+                        dashboardLink.innerHTML = '<i class="fas fa-file-medical-alt"></i> نتائجي الطبية'; // تغيير النص والأيقونة ليعبر أكثر
+                        dashboardLink.style.background = 'linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%)'; // لون سماوي/أزرق حيوي (Sky Blue)
+                        dashboardLink.style.boxShadow = '0 8px 25px rgba(14, 165, 233, 0.45)';
+                        dashboardLink.style.border = '1px solid rgba(255, 255, 255, 0.2)';
+                        dashboardLink.title = 'الدخول إلى ملفي الطبي';
+                    }
+                    if (archiveLink) archiveLink.style.display = 'none';
+                }
+
+                // Load notifications
+                loadNotifications();
+            } else {
+                // Show guest nav, hide user nav
+                if (guestNav) guestNav.style.display = 'block';
+                if (userNav) userNav.style.display = 'none';
+
+                const reviewBtn = document.getElementById('addReviewBtn');
+                if (reviewBtn) reviewBtn.style.display = 'none';
+            }
+        }
+
+        // Setup notifications
+        function setupNotifications() {
+            const notifBtn = document.getElementById('notifications-btn');
+            const dropdown = document.getElementById('notifications-dropdown');
+
+            if (notifBtn && dropdown) {
+                notifBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    dropdown.classList.toggle('show');
+
+                    // إخفاء النقطة الحمراء عند فتح dropdown
+                    const redDot = document.getElementById('notificationRedDot');
+                    if (redDot && dropdown.classList.contains('show')) {
+                        redDot.style.display = 'none';
+                    }
+                });
+
+                // Close dropdown when clicking outside
+                document.addEventListener('click', () => {
+                    dropdown.classList.remove('show');
+                });
+            }
+        }
+
+        // Load notifications from API
+        async function loadNotifications() {
+            const badge = document.getElementById('notification-badge');
+            const list = document.getElementById('notifications-list');
+
+            try {
+                const tokens = JSON.parse(localStorage.getItem(TOKEN_KEY) || '{}');
+                if (!tokens.access) return;
+
+                const response = await fetch(`${API_BASE}/api/notifications/`, {
+                    headers: {
+                        'Authorization': `Bearer ${tokens.access}`,
+                        'Accept': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    const notifications = Array.isArray(data) ? data : (data.results || []);
+                    const unreadCount = notifications.filter(n => !n.is_read).length;
+
+                    // Update red dot
+                    const redDot = document.getElementById('notificationRedDot');
+                    if (redDot) {
+                        if (unreadCount > 0) {
+                            redDot.style.display = 'block';
+                        } else {
+                            redDot.style.display = 'none';
+                        }
+                    }
+
+                    // Update list
+                    if (list && notifications.length > 0) {
+                        list.innerHTML = notifications.slice(0, 5).map(n => `
+                            <div class="notification-item ${n.is_read ? '' : 'unread'}">
+                                <div class="notification-title">${n.title || 'إشعار جديد'}</div>
+                                <div class="notification-text">${n.message || ''}</div>
+                                <div class="notification-time">${formatTimeAgo(n.created_at)}</div>
+                            </div>
+                        `).join('');
+                    }
+                }
+            } catch (error) {
+                console.log('Could not load notifications:', error);
+            }
+        }
+
+        // Format time ago
+        function formatTimeAgo(dateString) {
+            if (!dateString) return '';
+            const date = new Date(dateString);
+            const now = new Date();
+            const diffMs = now - date;
+            const diffMins = Math.floor(diffMs / 60000);
+            const diffHours = Math.floor(diffMs / 3600000);
+            const diffDays = Math.floor(diffMs / 86400000);
+
+            if (diffMins < 1) return 'الآن';
+            if (diffMins < 60) return `منذ ${diffMins} دقيقة`;
+            if (diffHours < 24) return `منذ ${diffHours} ساعة`;
+            return `منذ ${diffDays} يوم`;
+        }
+
+        // Counter animation for statistics
+        function animateCounter(element, target) {
+            if (!element || !target) return;
+            let current = 0;
+            const increment = target / 100;
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    current = target;
+                    clearInterval(timer);
+                }
+                element.textContent = Math.floor(current).toLocaleString();
+            }, 20);
+        }
+
+        // Start counter animation when in view
+        const observerOptions = {
+            threshold: 0.5,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const element = entry.target;
+                    const target = parseInt(element.dataset.count);
+                    animateCounter(element, target);
+                    observer.unobserve(element);
+                }
+            });
+        }, observerOptions);
+
+        // Initialize on DOM load
+        document.addEventListener('DOMContentLoaded', () => {
+            // Update navbar based on login status
+            updateNavbar();
+
+            // Show welcome toast if first login
+            showWelcomeToast();
+
+            // Setup notifications
+            setupNotifications();
+
+            // Setup logout button
+            const logoutBtn = document.getElementById('logout-btn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', logout);
+            }
+
+            // Observe stat counters
+            document.querySelectorAll('.stat-number').forEach(el => {
+                observer.observe(el);
+            });
+
+            // Load Health News
+            loadHealthNews();
+
+            // Load Testimonials
+            loadTestimonials();
+        });
+
+
+        // Health News Data (Updated Daily)
+        // Health News Data (Updated Daily logic)
+        function loadHealthNews() {
+            const healthNews = [
+                // === أخبار ليبية ===
+                {
+                    title: "ليبيا: افتتاح مستشفى جديد في طرابلس بتجهيزات عالمية",
+                    description: "وزارة الصحة الليبية تدشن مستشفى متطور بسعة 300 سرير مجهز بأحدث التقنيات الطبية لخدمة المواطنين في العاصمة",
+                    image: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=500",
+                    source: "وزارة الصحة الليبية",
+                    badge: "ليبيا",
+                    url: "https://health.gov.ly/"
+                },
+                {
+                    title: "حملة تطعيم وطنية ضد شلل الأطفال في كافة المدن الليبية",
+                    description: "إطلاق حملة صحية شاملة بالتعاون مع منظمة الصحة العالمية تستهدف أكثر من مليون طفل في مختلف أنحاء ليبيا",
+                    image: "https://images.unsplash.com/photo-1631815588090-d4bfec5b1ccb?w=500",
+                    source: "المركز الوطني لمكافحة الأمراض - ليبيا",
+                    badge: "عاجل",
+                    url: "https://ncdc.gov.ly/"
+                },
+                {
+                    title: "ليبيا: برنامج وطني للكشف المبكر عن سرطان الثدي",
+                    description: "وزارة الصحة تطلق مبادرة شاملة لفحص النساء مجاناً في جميع المراكز الصحية بالتعاون مع منظمات دولية",
+                    image: "https://images.unsplash.com/photo-1579154204601-01588f351e67?w=500",
+                    source: "الوطن الليبية",
+                    badge: "ليبيا",
+                    url: "https://alwasat.ly/"
+                },
+                {
+                    title: "تقرير: تحسن ملحوظ في الخدمات الصحية بمدينة بنغازي",
+                    description: "مستشفيات بنغازي تشهد تطوراً في جودة الخدمات الطبية مع توفير أجهزة حديثة وكوادر طبية مدربة",
+                    image: "https://images.unsplash.com/photo-1516549655169-df83a0774514?w=500",
+                    source: "صحيفة فبراير الليبية",
+                    badge: "ليبيا",
+                    url: "https://febrayer.com/"
+                },
+                {
+                    title: "مصراتة: تدشين مركز جديد لأمراض القلب والقسطرة",
+                    description: "افتتاح مركز متخصص لخدمة مرضى القلب في المنطقة الوسطى بأحدث التجهيزات العالمية",
+                    image: "https://images.unsplash.com/photo-1628348068343-c6a848d2b6dd?w=500",
+                    source: "وكالة الأنباء الليبية",
+                    badge: "ليبيا",
+                    url: "https://lanalibya.ly/"
+                },
+
+                // === أخبار عربية وعالمية ===
+                {
+                    title: "دراسة عربية: التغذية المتوازنة تقلل أمراض القلب بنسبة 40%",
+                    description: "بحث طبي حديث من جامعات عربية يؤكد أهمية النظام الغذائي المتوسطي في الوقاية من الأمراض المزمنة",
+                    image: "https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=500",
+                    source: "الجزيرة صحة",
+                    badge: "دراسة",
+                    url: "https://www.aljazeera.net/health"
+                },
+                {
+                    title: "تطورات علاج السرطان في العالم العربي",
+                    description: "مراكز طبية عربية تحقق إنجازات مهمة في علاج الأورام باستخدام تقنيات العلاج المناعي الحديثة",
+                    image: "https://images.unsplash.com/photo-1579684453377-48ec05c6b30a?w=500",
+                    source: "العربية صحة",
+                    badge: "علمي",
+                    url: "https://www.alarabiya.net/last-page/health"
+                },
+                {
+                    title: "نصائح صحية لشهر رمضان: كيف تحافظ على صحتك أثناء الصيام",
+                    description: "أطباء عرب يقدمون إرشادات مهمة للصائمين حول التغذية الصحية والوقاية من الجفاف خلال الشهر الفضيل",
+                    image: "https://images.unsplash.com/photo-1609501676725-7186f017a4b7?w=500",
+                    source: "بي بي سي عربي - صحة",
+                    badge: "نصائح",
+                    url: "https://www.bbc.com/arabic/topics/c06gq72p2y9t"
+                },
+                {
+                    title: "الصحة النفسية في العالم العربي: دراسة شاملة",
+                    description: "تقرير جديد يسلط الضوء على أهمية الدعم النفسي وكسر وصمة العار المحيطة بالأمراض النفسية في المجتمعات العربية",
+                    image: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=500",
+                    source: "الشرق الأوسط صحة",
+                    badge: "توعية",
+                    url: "https://aawsat.com/section/%D8%B5%D8%AD%D8%A9"
+                },
+                {
+                    title: "مبادرة عربية لمكافحة السمنة والسكري",
+                    description: "حملة توعوية واسعة في الدول العربية للحد من انتشار السمنة والسكري من خلال الرياضة والتغذية السليمة",
+                    image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=500",
+                    source: "سكاي نيوز عربية - صحة",
+                    badge: "توعية",
+                    url: "https://www.skynewsarabia.com/health"
+                },
+                {
+                    title: "اكتشافات جديدة حول النوم وتأثيره على المناعة",
+                    description: "العلماء يؤكدون أن النوم الجيد لمدة 7-8 ساعات يعزز كفاءة الجهاز المناعي بشكل كبير",
+                    image: "https://images.unsplash.com/photo-1512403754473-27835f7b9984?w=500",
+                    source: "Nature Health",
+                    badge: "دراسة",
+                    url: "https://www.nature.com/"
+                },
+                {
+                    title: "أهمية شرب الماء لصحة الكلى",
+                    description: "نصائح طبية تؤكد على ضرورة شرب كميات كافية من الماء يومياً للحفاظ على وظائف الكلى الحيوية",
+                    image: "https://images.unsplash.com/photo-1548839140-29a749e1cf4d?w=500",
+                    source: "Mayo Clinic",
+                    badge: "نصائح",
+                    url: "https://www.mayoclinic.org/"
+                }
+            ];
+
+            // Get Daily News based on Date
+            const selectedNews = getDailyNews(healthNews, 3);
+            renderHealthNews(selectedNews);
+        }
+
+        // دالة لاختيار أخبار تتغير يومياً (وليست عشوائية تماماً)
+        // === Testimonials Logic ===
+
+        function loadTestimonials() {
+            const container = document.getElementById('testimonialsList');
+            if (!container) return;
+
+            fetch(`${API_BASE}/api/testimonials/`)
+                .then(res => res.json())
+                .then(data => {
+                    // إذا لم تكن هناك آراء بعد، اعرض آراء افتراضية (للتجربة والعرض الأولي)
+                    const results = Array.isArray(data) ? data : (data.results || []);
+
+                    if (results.length === 0) {
+                        displayDefaultTestimonials(container);
+                    } else {
+                        renderTestimonials(results, container);
+                    }
+                })
+                .catch(err => {
+                    console.error('Failed to load testimonials', err);
+                    displayDefaultTestimonials(container); // Fallback
+                });
+        }
+
+        function displayDefaultTestimonials(container) {
+            container.innerHTML = `
+                <div class="testimonial-card">
+                    <div class="testimonial-stars">
+                        ${getStarsHTML(5)}
+                    </div>
+                    <p class="testimonial-text">"نظام رائع سهل الاستخدام، النتائج تظهر بسرعة وأثق في أمان بياناتي الطبية"</p>
+                    <div class="testimonial-author">أحمد محمد</div>
+                    <div class="testimonial-role">مريض</div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-stars">
+                        ${getStarsHTML(5)}
+                    </div>
+                    <p class="testimonial-text">"كطبيب، أحب الطريقة التي يمكنني من خلالها متابعة نتائج مرضاي بسهولة وفعالية"</p>
+                    <div class="testimonial-author">د. فاطمة علي</div>
+                    <div class="testimonial-role">طبيبة باطنية</div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-stars">
+                        ${getStarsHTML(5)}
+                    </div>
+                    <p class="testimonial-text">"إدارة ممتازة للبيانات والتحاليل، النظام ساعدني كثيراً في تنظيم عملي"</p>
+                    <div class="testimonial-author">مختبر المدينة</div>
+                    <div class="testimonial-role">مختبر طبي</div>
+                </div>
+            `;
+        }
+
+        function renderTestimonials(testimonials, container) {
+            container.innerHTML = testimonials.map(t => `
+                <div class="testimonial-card">
+                    <div class="testimonial-stars">
+                        ${getStarsHTML(t.rating)}
+                    </div>
+                    <p class="testimonial-text">"${t.content}"</p>
+                    <div class="testimonial-author">${t.user_info?.first_name || 'مستخدم'} ${t.user_info?.last_name || ''}</div>
+                    <div class="testimonial-role">مستخدم MyLabLink</div>
+                </div>
+            `).join('');
+        }
+
+        function getStarsHTML(rating) {
+            let stars = '';
+            for (let i = 0; i < 5; i++) {
+                if (i < rating) stars += '<i class="fas fa-star" style="color: #ffd700;"></i>';
+                else stars += '<i class="far fa-star" style="color: #ddd;"></i>';
+            }
+            return stars;
+        }
+
+        // Modal Logic
+        const modal = document.getElementById('testimonialModal');
+
+        function openTestimonialModal() {
+            if (modal) modal.style.display = 'block';
+        }
+
+        function closeTestimonialModal() {
+            if (modal) modal.style.display = 'none';
+        }
+
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                closeTestimonialModal();
+            }
+        }
+
+        // Custom Toast Function
+        function showToast(message, type = 'success') {
+            // Remove existing toast if any
+            const existingToast = document.querySelector('.custom-toast');
+            if (existingToast) existingToast.remove();
+
+            const toast = document.createElement('div');
+            toast.className = `custom-toast ${type}`;
+
+            const icon = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
+
+            toast.innerHTML = `
+                <i class="fas ${icon}"></i>
+                <p>${message}</p>
+            `;
+
+            document.body.appendChild(toast);
+
+            // Trigger animation
+            setTimeout(() => toast.classList.add('show'), 100);
+
+            // Remove after 3 seconds
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 400);
+            }, 3000);
+        }
+
+        // Helper for Authenticated Requests
+        async function authenticatedFetch(url, options = {}) {
+            let tokens = JSON.parse(localStorage.getItem(TOKEN_KEY) || '{}');
+
+            if (!tokens.access) {
+                window.location.href = '/auth.html';
+                throw new Error('No access token');
+            }
+
+            // Append Authorization header
+            options.headers = {
+                ...options.headers,
+                'Authorization': `Bearer ${tokens.access}`
+            };
+
+            let res = await fetch(url, options);
+
+            // If 401, try to refresh
+            if (res.status === 401) {
+                console.log('Token expired, trying refresh...');
+                if (tokens.refresh) {
+                    try {
+                        const refreshRes = await fetch(`${API_BASE}/api/token/refresh/`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ refresh: tokens.refresh })
+                        });
+
+                        if (refreshRes.ok) {
+                            const data = await refreshRes.json();
+                            tokens.access = data.access;
+                            localStorage.setItem(TOKEN_KEY, JSON.stringify(tokens));
+                            console.log('Token refreshed successfully');
+
+                            // Retry original request with new token
+                            options.headers['Authorization'] = `Bearer ${tokens.access}`;
+                            res = await fetch(url, options);
+                        } else {
+                            throw new Error('Refresh failed');
+                        }
+                    } catch (e) {
+                        console.error('Session expired', e);
+                        localStorage.removeItem(TOKEN_KEY);
+                        localStorage.removeItem(USER_KEY);
+                        showToast('انتهت صلاحية الجلسة، يرجى تسجيل الدخول مجدداً', 'error');
+                        setTimeout(() => window.location.href = '/auth.html', 2000);
+                        throw e;
+                    }
+                } else {
+                    window.location.href = '/auth.html';
+                    throw new Error('No refresh token');
+                }
+            }
+            return res;
+        }
+
+        async function submitTestimonial(event) {
+            event.preventDefault();
+
+            const content = document.getElementById('testimonialContent').value;
+            const rating = document.querySelector('input[name="rating"]:checked').value;
+
+            try {
+                // Use authenticatedFetch to handle token expiration automatically
+                const res = await authenticatedFetch(`${API_BASE}/api/testimonials/`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ content, rating })
+                });
+
+                if (res.ok) {
+                    showToast('شكراً لك! تم إرسال رأيك للمراجعة وسيظهر قريباً.', 'success');
+                    closeTestimonialModal();
+                    document.getElementById('testimonialForm').reset();
+                } else {
+                    const err = await res.json();
+                    showToast('حدث خطأ: ' + (err.detail || JSON.stringify(err)), 'error');
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        function getDailyNews(newsArray, count) {
+            // استخدام تاريخ اليوم كـ "بذرة" (Seed) للاختيار
+            const today = new Date();
+            const seed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate(); // e.g., 20251215
+
+            // خوارزمية بسيطة للخلط تعتمد على الـ Seed
+            const shuffled = [...newsArray].sort((a, b) => {
+                const valA = stringToHash(a.title + seed);
+                const valB = stringToHash(b.title + seed);
+                return valA - valB;
+            });
+
+            return shuffled.slice(0, count);
+        }
+
+        // تحويل النص إلى رقم (Hashing simple)
+        function stringToHash(str) {
+            let hash = 0;
+            if (str.length === 0) return hash;
+            for (let i = 0; i < str.length; i++) {
+                const char = str.charCodeAt(i);
+                hash = ((hash << 5) - hash) + char;
+                hash = hash & hash; // Convert to 32bit integer
+            }
+            return hash;
+        }
+
+        function renderHealthNews(newsItems) {
+            const container = document.getElementById('healthNewsGrid');
+            if (!container) return;
+
+            // تواريخ ديناميكية للعرض
+            const dateLabels = ["اليوم", "أمس", "منذ يومين"];
+
+            container.innerHTML = newsItems.map((news, index) => `
+                <div class="news-card" onclick="window.open('${news.url}', '_blank')">
+                    <span class="news-card-badge">${news.badge}</span>
+                    <img src="${news.image}" alt="${news.title}" class="news-card-image" 
+                         onerror="this.src='https://via.placeholder.com/500x200/FFB88C/FFFFFF?text=صحة+عالمية'">
+                    <div class="news-card-content">
+                        <div class="news-card-date">
+                            <i class="fas fa-clock"></i>
+                            ${dateLabels[index] || "حديثاً"}
+                        </div>
+                        <h3 class="news-card-title">${news.title}</h3>
+                        <p class="news-card-description">${news.description}</p>
+                        <div class="news-card-source">
+                            <span class="news-source-name">
+                                <i class="fas fa-globe"></i> ${news.source}
+                            </span>
+                            <a href="${news.url}" class="news-read-more" target="_blank" onclick="event.stopPropagation()">
+                                اقرأ المزيد <i class="fas fa-arrow-left"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+
+
+        // Initialize and Event Listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('🚀 App Initialized');
+
+            // Core Loads
+            if (typeof updateNavbar === 'function') updateNavbar();
+            if (typeof loadTestimonials === 'function') loadTestimonials();
+            if (typeof loadHealthNews === 'function') loadHealthNews();
+
+            // Setup Form Listener strictly
+            const form = document.getElementById('testimonialForm');
+            if (form) {
+                // Remove inline just in case
+                form.removeAttribute('onsubmit');
+                // Remove old listeners (not possible without reference, but good practice to just add new one if we are sure)
+                form.addEventListener('submit', submitTestimonial);
+                console.log('✅ Testimonial form listener attached via JS');
+            }
+        });
+
+    </script>
+</body>
+
+</html>

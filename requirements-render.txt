@@ -1,0 +1,8 @@
+# Additional requirements for production deployment on Render
+# Install with: pip install -r requirements-render.txt
+
+# PostgreSQL adapter for Python (if using Render's PostgreSQL)
+psycopg2-binary==2.9.9
+
+# Parse DATABASE_URL environment variable
+dj-database-url==2.1.0

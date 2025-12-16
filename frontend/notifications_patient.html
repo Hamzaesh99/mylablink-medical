@@ -1,0 +1,1128 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الإشعارات — MyLabLink</title>
+    <link rel="icon" type="image/x-icon" href="{% static 'images/logo.jpg' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&family=Cairo:wght@300;400;600;700;900&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Tajawal', 'Cairo', sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #FFB88C 0%, #B19CD9 35%, #6BA3D9 70%, #8BBCE6 100%);
+            background-attachment: fixed;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background Particles */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 20% 50%, rgba(255, 184, 140, 0.3), transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(177, 156, 217, 0.3), transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(107, 163, 217, 0.3), transparent 50%),
+                radial-gradient(circle at 60% 70%, rgba(139, 188, 230, 0.2), transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+            animation: floatParticles 25s ease-in-out infinite;
+        }
+
+        @keyframes floatParticles {
+
+            0%,
+            100% {
+                transform: translateY(0px) scale(1);
+                opacity: 0.4;
+            }
+
+            50% {
+                transform: translateY(-30px) scale(1.05);
+                opacity: 0.7;
+            }
+        }
+
+        .dash-grid {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 2rem;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border-radius: 2rem;
+            border: 2px solid rgba(255, 255, 255, 0.35);
+            padding: 2rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            height: fit-content;
+            position: sticky;
+            top: 2rem;
+            animation: fadeInLeft 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .main-area {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border-radius: 2rem;
+            border: 2px solid rgba(255, 255, 255, 0.35);
+            padding: 2.5rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            animation: fadeInUp 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(60px) scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .sidebar .profile {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 1rem;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 1.5rem;
+            margin-bottom: 2rem;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .sidebar .avatar {
+            width: 70px;
+            height: 70px;
+            flex-shrink: 0;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #FF1744 0%, #FF5252 50%, #FF6B6B 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            box-shadow:
+                0 8px 20px rgba(255, 23, 68, 0.4),
+                inset 0 -2px 10px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+            border: 3px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .sidebar .avatar::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+
+            0%,
+            100% {
+                transform: translate(0, 0);
+                opacity: 0.5;
+            }
+
+            50% {
+                transform: translate(10px, 10px);
+                opacity: 0.8;
+            }
+        }
+
+        .sidebar .avatar i {
+            position: relative;
+            z-index: 2;
+            font-size: 2.2rem;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .sidebar a {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: #000000;
+            padding: 1rem 1.5rem;
+            border-radius: 1rem;
+            margin-bottom: 0.5rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-weight: 700;
+        }
+
+        .sidebar a:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(-5px);
+        }
+
+        .sidebar a.active {
+            background: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            color: white;
+        }
+
+        .card-header {
+            background: rgba(255, 255, 255, 0.1);
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+            color: #000000;
+            font-weight: 800;
+        }
+
+        h2,
+        h3,
+        h4,
+        h5 {
+            color: #000000;
+            font-weight: 800;
+        }
+
+        .list-group-item {
+            background: rgba(255, 255, 255, 0.4);
+            border: none;
+            margin-bottom: 0.5rem;
+            border-radius: 1rem !important;
+            backdrop-filter: blur(5px);
+        }
+
+        @media (max-width: 768px) {
+            .dash-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: relative;
+                top: 0;
+            }
+        }
+
+        /* Notification Item Styles */
+        .notification-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1.5rem;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 1.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+            cursor: default;
+            backdrop-filter: blur(5px);
+        }
+
+        .notification-item:hover {
+            background: rgba(255, 255, 255, 0.6);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .notification-item.unread {
+            background: rgba(255, 255, 255, 0.85);
+            border-left: 5px solid #FF8C69;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        .notif-icon-wrapper {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #FFB88C 0%, #FF8C69 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            color: white;
+            font-size: 1.5rem;
+            box-shadow: 0 8px 20px rgba(255, 140, 105, 0.3);
+            position: relative;
+        }
+
+        .notif-content {
+            flex: 1;
+        }
+
+        .time-text {
+            font-size: 0.85rem;
+            opacity: 0.8;
+            font-weight: 500;
+        }
+
+        .badge-new {
+            background: #FF1744 !important;
+            box-shadow: 0 4px 10px rgba(255, 23, 68, 0.3);
+            font-weight: 700;
+            padding: 0.35rem 0.6rem;
+            border-radius: 0.5rem;
+        }
+
+        .badge {
+            padding: 0.35rem 0.8rem;
+            border-radius: 2rem;
+            font-weight: 700;
+            font-size: 0.75rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .badge-success {
+            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+            color: white;
+            box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2);
+        }
+
+        .badge-warning {
+            background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+            color: white;
+            box-shadow: 0 4px 10px rgba(245, 158, 11, 0.2);
+        }
+
+        .badge-danger,
+        .badge-critical {
+            background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+            color: white;
+            box-shadow: 0 4px 10px rgba(239, 68, 68, 0.2);
+        }
+
+        .badge-secondary,
+        .badge-info {
+            background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+            color: white;
+            box-shadow: 0 4px 10px rgba(59, 130, 246, 0.2);
+        }
+
+        /* Red Dot Notification Badge */
+        .notification-red-dot {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 12px;
+            height: 12px;
+            background: #FF1744;
+            border-radius: 50%;
+            border: 2px solid white;
+            box-shadow: 0 2px 8px rgba(255, 23, 68, 0.5);
+            animation: pulse-dot 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-dot {
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(1.2);
+                opacity: 0.8;
+            }
+        }
+
+        /* Sidebar Link with relative position for dot */
+        .sidebar a {
+            position: relative;
+        }
+    </style>
+</head>
+
+<body>
+    {% include 'partials/messages.html' %}
+    <div class="dash-grid">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="profile bounce-in">
+                <div class="avatar">
+                    <i class="bi bi-person"></i>
+                </div>
+                <div style="flex: 1;">
+                    <div id="patientName" style="
+                        font-weight: 900; 
+                        color: #000000;
+                        font-size: 1.1rem;
+                        margin-bottom: 0.25rem;
+                        text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                    ">جاري التحميل...</div>
+                    <div style="
+                        background: linear-gradient(135deg, #FF1744 0%, #FF5252 100%);
+                        color: white;
+                        font-size: 0.75rem;
+                        font-weight: 700;
+                        padding: 0.25rem 0.75rem;
+                        border-radius: 2rem;
+                        display: inline-block;
+                        box-shadow: 0 4px 15px rgba(255, 23, 68, 0.3);
+                    ">مريض</div>
+                </div>
+            </div>
+
+            <nav class="sidebar-top">
+
+                <a href="dashboard_patient.html" class="slide-in">
+                    <i class="bi bi-card-list"></i>
+                    <span>النتائج</span>
+                </a>
+
+                <a href="tips_patient.html" class="slide-in" style="animation-delay: 0.3s;">
+                    <i class="bi bi-lightbulb"></i>
+                    <span>نصائح صحية</span>
+                </a>
+                <a href="notifications_patient.html" class="active slide-in" style="animation-delay: 0.4s;">
+                    <i class="bi bi-bell"></i>
+                    <span>الإشعارات</span>
+                    <span id="notificationRedDot" class="notification-red-dot" style="display:none;"></span>
+                </a>
+                <a href="settings_patient.html" class="slide-in" style="animation-delay: 0.45s;">
+                    <i class="bi bi-gear"></i>
+                    <span>الإعدادات</span>
+                </a>
+                <a href="/auth.html" class="slide-in" style="animation-delay: 0.5s;"
+                    onclick="event.preventDefault(); logout();">
+                    <i class="bi bi-box-arrow-left"></i>
+                    <span>الخروج</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <section class="main-area">
+            <div class="d-flex justify-content-between align-items-center mb-4 animate-up">
+                <div>
+                    <h2 class="mb-1">الإشعارات</h2>
+                    <p class="text-muted">آخر التنبيهات والأخبار</p>
+                </div>
+                <button class="btn" onclick="showRefreshNotification()" style="
+                    background: linear-gradient(135deg, #FFB88C 0%, #FF8C69 100%);
+                    border: none;
+                    color: white;
+                    padding: 0.75rem 1.5rem;
+                    border-radius: 1rem;
+                    font-weight: 700;
+                    box-shadow: 0 8px 20px rgba(255, 140, 105, 0.3);
+                    transition: all 0.3s ease;
+                " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 12px 30px rgba(255, 140, 105, 0.4)'"
+                    onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 20px rgba(255, 140, 105, 0.3)'">
+                    <i class="bi bi-arrow-clockwise"></i>
+                    تحديث
+                </button>
+            </div>
+
+            <div class="card animate-up">
+                <div class="card-body p-5">
+                    <!-- Loading State -->
+                    <div id="notificationsLoading" class="text-center py-5">
+                        <div class="spinner-border text-primary" role="status"></div>
+                        <p class="mt-3 text-muted">جاري تحميل الإشعارات...</p>
+                    </div>
+
+                    <!-- Notifications List -->
+                    <div id="notificationsList" class="d-flex flex-column gap-3" style="display: none;"></div>
+
+                    <div id="emptyState" class="text-center py-5" style="display: none;">
+                        <!-- Animated Bell Icon -->
+                        <div class="mb-4" style="position: relative; display: inline-block;">
+                            <div style="
+                                width: 120px;
+                                height: 120px;
+                                background: linear-gradient(135deg, #FFB88C 0%, #FF8C69 100%);
+                                border-radius: 50%;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                box-shadow: 0 15px 40px rgba(255, 140, 105, 0.4);
+                                animation: bellPulse 2s ease-in-out infinite;
+                                position: relative;
+                                z-index: 2;
+                            ">
+                                <i class="bi bi-bell" style="font-size: 3.5rem; color: white;"></i>
+                            </div>
+                            <!-- Ripple Effect -->
+                            <div style="
+                                position: absolute;
+                                top: 50%;
+                                left: 50%;
+                                transform: translate(-50%, -50%);
+                                width: 120px;
+                                height: 120px;
+                                border-radius: 50%;
+                                background: linear-gradient(135deg, rgba(255, 184, 140, 0.3) 0%, rgba(255, 140, 105, 0.3) 100%);
+                                animation: ripple 2s ease-out infinite;
+                                z-index: 1;
+                            "></div>
+                        </div>
+
+                        <!-- Title -->
+                        <h3 class="mb-3" style="
+                            background: linear-gradient(135deg, #FF1744 0%, #FF8C69 100%);
+                            -webkit-background-clip: text;
+                            -webkit-text-fill-color: transparent;
+                            background-clip: text;
+                            font-weight: 900;
+                            font-size: 2rem;
+                        ">لا توجد إشعارات</h3>
+
+                        <!-- Description -->
+                        <p class="mb-4" style="
+                            color: #1a1a1a;
+                            font-size: 1.1rem;
+                            font-weight: 600;
+                            max-width: 500px;
+                            margin: 0 auto;
+                            line-height: 1.8;
+                        ">
+                            ستظهر هنا جميع التحديثات والتنبيهات الخاصة بنتائج التحاليل والمواعيد الطبية
+                        </p>
+
+                        <!-- Decorative Elements -->
+                        <div class="d-flex justify-content-center gap-3 mt-4">
+                            <div style="
+                                width: 60px;
+                                height: 4px;
+                                background: linear-gradient(90deg, transparent, #FFB88C, transparent);
+                                border-radius: 2px;
+                            "></div>
+                        </div>
+
+                        <!-- Info Box -->
+                        <div class="mt-5 p-4" style="
+                            background: rgba(255, 184, 140, 0.15);
+                            border-radius: 1.5rem;
+                            border: 2px solid rgba(255, 184, 140, 0.3);
+                            max-width: 600px;
+                            margin: 0 auto;
+                        ">
+                            <div class="d-flex align-items-center justify-content-center gap-3">
+                                <i class="bi bi-info-circle" style="font-size: 1.5rem; color: #FF8C69;"></i>
+                                <p class="mb-0" style="color: #2d2d2d; font-weight: 600; text-align: right;">
+                                    سيتم إعلامك فوراً عند صدور أي نتائج جديدة أو تحديثات هامة
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <style>
+                @keyframes bellPulse {
+
+                    0%,
+                    100% {
+                        transform: scale(1) rotate(0deg);
+                    }
+
+                    25% {
+                        transform: scale(1.05) rotate(-5deg);
+                    }
+
+                    50% {
+                        transform: scale(1.1) rotate(5deg);
+                    }
+
+                    75% {
+                        transform: scale(1.05) rotate(-5deg);
+                    }
+                }
+
+                @keyframes ripple {
+                    0% {
+                        transform: translate(-50%, -50%) scale(1);
+                        opacity: 0.8;
+                    }
+
+                    100% {
+                        transform: translate(-50%, -50%) scale(2);
+                        opacity: 0;
+                    }
+                }
+            </style>
+        </section>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            loadPatientInfo();
+        });
+
+        function loadPatientInfo() {
+            const userInfo = localStorage.getItem('user_info');
+            if (userInfo) {
+                try {
+                    const user = JSON.parse(userInfo);
+
+                    // Update Name
+                    const displayName = (user.first_name && user.last_name)
+                        ? `${user.first_name} ${user.last_name}`
+                        : (user.name || user.username || 'مريض');
+                    document.getElementById('patientName').textContent = `أهلاً، ${displayName}`;
+
+                    // Update Avatar Logic
+                    const avatarDiv = document.querySelector('.sidebar .avatar');
+                    if (avatarDiv) {
+                        let avatarUrl = user.avatar;
+                        if (!avatarUrl) {
+                            // Generate fallback avatar
+                            avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=FF1744&color=fff&size=128&bold=true`;
+                        }
+
+                        // Replace content with img, preserving parent styling
+                        avatarDiv.innerHTML = `<img src="${avatarUrl}" alt="Profile" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%; position: relative; z-index: 2;">`;
+                    }
+
+                } catch (e) { console.error(e); }
+            }
+        }
+
+        // Custom styled notification function
+        const API_BASE = window.API_BASE || 'http://127.0.0.1:8000';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadNotifications();
+            setInterval(loadNotifications, 30000); // Poll every 30s
+        });
+
+        async function loadNotifications() {
+            const loading = document.getElementById('notificationsLoading');
+            const list = document.getElementById('notificationsList');
+            const empty = document.getElementById('emptyState');
+
+            // Wait for elements if script runs too early (though DOMContentLoaded handles it)
+            if (!loading || !list || !empty) return;
+
+            loading.style.display = 'block';
+            list.style.display = 'none';
+            empty.style.display = 'none';
+
+            try {
+                const tokenObj = JSON.parse(localStorage.getItem('mylab_tokens') || '{}');
+                const token = tokenObj.access;
+
+                if (!token) {
+                    // Not logged in or expired
+                    window.location.href = '/auth.html';
+                    return;
+                }
+
+                const response = await fetch(`${API_BASE}/api/notifications/`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    const results = Array.isArray(data) ? data : (data.results || []);
+
+                    if (results.length === 0) {
+                        loading.style.display = 'none';
+                        empty.style.display = 'block';
+                    } else {
+                        // Check for new unread messages to play sound
+                        const unreadCount = results.filter(n => !n.is_read).length;
+                        const lastCount = parseInt(sessionStorage.getItem('last_patient_notif_count') || '0');
+
+                        if (unreadCount > lastCount) {
+                            try {
+                                const audio = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3');
+                                audio.play().catch(e => console.log('Audio autoplay blocked', e));
+                            } catch (e) { console.log(e); }
+                        }
+                        sessionStorage.setItem('last_patient_notif_count', unreadCount);
+
+                        renderNotifications(results);
+                        loading.style.display = 'none';
+                        list.style.display = 'flex';
+
+                        // Mark all as read IS REMOVED so user sees them as new until clicked or viewed
+                        // markAllNotificationsAsRead(); 
+                    }
+                } else if (response.status === 401) {
+                    // Token expired
+                    window.location.href = '/auth.html';
+                } else {
+                    console.error('Failed to load notifications');
+                    loading.style.display = 'none';
+                    empty.style.display = 'block'; // Fallback
+                }
+            } catch (e) {
+                console.error(e);
+                loading.style.display = 'none';
+                empty.style.display = 'block'; // Fallback
+            }
+        }
+
+        function renderNotifications(notifications) {
+            const list = document.getElementById('notificationsList');
+            list.innerHTML = '';
+
+            notifications.forEach(notif => {
+                const item = document.createElement('div');
+                item.className = 'notification-item animate__animated animate__fadeInUp';
+                if (!notif.is_read) item.classList.add('unread');
+
+                let iconContent;
+                let doctorName = '';
+
+                // Determine Icon or Avatar
+                if (notif.result_info && notif.result_info.issued_by_info) {
+                    // It's a result with doctor info
+                    const doctor = notif.result_info.issued_by_info;
+                    doctorName = (doctor.first_name && doctor.last_name) ?
+                        `د. ${doctor.first_name} ${doctor.last_name}` :
+                        `د. ${doctor.username}`;
+
+                    let avatarUrl = doctor.avatar;
+                    if (!avatarUrl) {
+                        avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(doctorName)}&background=random`;
+                    }
+
+                    // Avatar Image
+                    iconContent = `<img src="${avatarUrl}" alt="${doctorName}" class="rounded-circle" style="width: 100%; height: 100%; object-fit: cover;">`;
+                } else if (notif.sender_info) {
+                    // It's a message from a user (Doctor)
+                    const sender = notif.sender_info;
+                    doctorName = (sender.first_name && sender.last_name) ?
+                        `${sender.first_name} ${sender.last_name}` :
+                        `${sender.username}`;
+
+                    let avatarUrl = sender.avatar;
+                    if (!avatarUrl) {
+                        avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(doctorName)}&background=random`;
+                    }
+                    iconContent = `<img src="${avatarUrl}" alt="${doctorName}" class="rounded-circle" style="width: 100%; height: 100%; object-fit: cover;">`;
+                } else {
+                    // Default Icons
+                    let iconClass = 'bi-bell';
+                    if (notif.title && notif.title.includes('نتيجة')) iconClass = 'bi-file-medical-fill';
+                    else if (notif.message && notif.message.includes('طبيب')) iconClass = 'bi-person-fill-add';
+                    else if (notif.title && notif.title.includes('رسالة')) iconClass = 'bi-chat-dots-fill';
+
+                    iconContent = `<i class="bi ${iconClass}"></i>`;
+                }
+
+                // Determine Title (Use Doctor Name if available for results or message)
+                const displayTitle = (notif.result_info && notif.result_info.issued_by_info) ?
+                    notif.result_info.issued_by_info.first_name + ' ' + notif.result_info.issued_by_info.last_name :
+                    (doctorName || notif.title);
+
+                item.innerHTML = `
+                    <div class="notif-icon-wrapper" style="${(doctorName) ? 'padding: 0; overflow: hidden; border: 2px solid white; box-shadow: 0 4px 10px rgba(0,0,0,0.1);' : ''}">
+                        ${iconContent}
+                    </div>
+                    <div class="notif-content">
+                        <div class="row align-items-center notif-meta">
+                            <div class="col-9">
+                                <h5 class="mb-1 notif-title" style="font-weight: 800;">${displayTitle}
+                                    ${!notif.is_read ? '<span class="badge bg-danger ms-2 badge-new">جديد</span>' : ''}
+                                </h5>
+                                <p class="mb-0 text-muted small user-select-all">${notif.message}</p>
+                            </div>
+                            <div class="col-3 text-end">
+                                <small class="text-muted time-text" style="font-size: 0.8rem;">${new Date(notif.created_at).toLocaleString('ar-EG', { month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric' })}</small>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                if (notif.result) {
+                    item.style.cursor = 'pointer';
+                    item.setAttribute('title', 'انقر لعرض تفاصيل النتيجة');
+                    item.onclick = async () => {
+                        handleNotificationClick(notif);
+                        viewResult(notif.result);
+                    };
+                } else {
+                    // It's a message or general notification
+                    item.style.cursor = 'pointer';
+                    item.onclick = async () => {
+                        handleNotificationClick(notif);
+                        Swal.fire({
+                            title: displayTitle,
+                            text: notif.message,
+                            icon: 'info',
+                            confirmButtonText: 'حسناً',
+                            confirmButtonColor: '#FFB88C'
+                        });
+                    };
+                }
+
+                list.appendChild(item);
+            });
+        }
+
+        async function handleNotificationClick(notif) {
+            if (!notif.is_read) {
+                // Update UI locally first
+                // Re-find the item in DOM if needed or just rely on reload, 
+                // but cleaner to update data object if passed by reference
+                notif.is_read = true;
+                await markNotificationRead(notif.id);
+                updateNotificationBadge();
+            }
+
+            // Initial Badge Update
+            updateNotificationBadge();
+        }
+
+        async function markNotificationRead(notifId) {
+            try {
+                const token = JSON.parse(localStorage.getItem('mylab_tokens') || '{}').access;
+                await fetch(`${API_BASE}/api/notifications/${notifId}/`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ is_read: true })
+                });
+            } catch (e) { console.error('Failed to mark read', e); }
+        }
+
+        async function markAllNotificationsAsRead() {
+            try {
+                const token = JSON.parse(localStorage.getItem('mylab_tokens') || '{}').access;
+                await fetch(`${API_BASE}/api/notifications/mark_all_read/`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                // Update badge (should become hidden)
+                updateNotificationBadge();
+            } catch (e) { console.error('Failed to mark all read', e); }
+        }
+
+        async function updateNotificationBadge() {
+            try {
+                const token = JSON.parse(localStorage.getItem('mylab_tokens') || '{}').access;
+                if (!token) return;
+
+                const response = await fetch(`${API_BASE}/api/notifications/`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    const results = Array.isArray(data) ? data : (data.results || []);
+                    const unreadCount = results.filter(n => !n.is_read).length;
+
+                    const redDot = document.getElementById('notificationRedDot');
+                    if (redDot) {
+                        if (unreadCount > 0) {
+                            redDot.style.display = 'block';
+                        } else {
+                            redDot.style.display = 'none';
+                        }
+                    }
+                }
+            } catch (e) { console.error(e); }
+        }
+
+        // عند تحميل الصفحة، علّم جميع الإشعارات كمقروءة وأخفِ النقطة
+        document.addEventListener('DOMContentLoaded', async () => {
+            // إخفاء النقطة الحمراء فوراً عند فتح صفحة الإشعارات
+            const redDot = document.getElementById('notificationRedDot');
+            if (redDot) {
+                redDot.style.display = 'none';
+            }
+
+            // تحميل الإشعارات
+            await loadNotifications();
+
+            // تعليم جميع الإشعارات كمقروءة بعد ثانية
+            setTimeout(async () => {
+                await markAllNotificationsAsRead();
+            }, 1000);
+        });
+
+        // --- Result Viewing Helpers ---
+        function formatDate(dateString) {
+            if (!dateString) return 'غير محدد';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('ar-LY', { year: 'numeric', month: 'short', day: 'numeric' });
+        }
+
+        function getStatusBadge(status) {
+            const statusMap = {
+                'draft': { label: 'قيد المعالجة', class: 'badge-warning' },
+                'published': { label: 'جاهز', class: 'badge-success' },
+                'completed': { label: 'جاهز', class: 'badge-success' },
+                'critical': { label: 'يحتاج متابعة', class: 'badge-critical' },
+                'archived': { label: 'مؤرشف', class: 'badge-secondary' }
+            };
+            const statusInfo = statusMap[status] || { label: 'غير محدد', class: 'badge-info' };
+            return `<span class="badge ${statusInfo.class}">${statusInfo.label}</span>`;
+        }
+
+        async function viewResult(resultId) {
+            try {
+                const token = JSON.parse(localStorage.getItem('mylab_tokens') || '{}').access;
+                Swal.showLoading();
+
+                const response = await fetch(`${API_BASE}/api/results/${resultId}/`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+
+                    Swal.fire({
+                        title: result.test_type_info?.name || 'تفاصيل التحليل',
+                        html: `
+                            <div class="text-end" style="direction: rtl; text-align: right;">
+                                <div class="mb-3 d-flex justify-content-between align-items-center bg-white p-2 rounded shadow-sm">
+                                     <span class="small"><strong>التاريخ:</strong> ${formatDate(result.issued_at || result.created_at)}</span>
+                                     <span class="small d-flex align-items-center gap-2"><strong>الحالة:</strong> ${getStatusBadge(result.status)}</span>
+                                </div>
+                                <div class="alert alert-light border shadow-sm">
+                                    <h6 class="fw-bold mb-2 text-primary">النتيجة:</h6>
+                                    <p class="mb-0 fs-5" style="white-space: pre-wrap; font-weight: 500;">${result.value || 'لا توجد نتيجة نصية'}</p>
+                                </div>
+                                ${result.notes ? `
+                                    <div class="mt-3 bg-light p-3 rounded">
+                                        <h6 class="fw-bold text-muted mb-1"><i class="bi bi-chat-quote-fill me-2"></i>ملاحظات الطبيب:</h6>
+                                        <p class="small text-muted mb-0">${result.notes}</p>
+                                    </div>
+                                ` : ''}
+                                
+                                ${(result.pdf || (result.files && result.files.length > 0)) ? `
+                                <div class="mt-4 text-center">
+                                    <a href="#" class="btn w-100" style="background: linear-gradient(135deg, #FFB88C 0%, #FF8C69 100%); color: white; font-weight: 700; border-radius: 1rem; padding: 0.75rem;" onclick="event.preventDefault(); downloadResult(${result.id})">
+                                        <i class="bi bi-file-earmark-pdf-fill me-2"></i> تحميل ملف النتيجة (PDF)
+                                    </a>
+                                </div>
+                                ` : ''}
+                            </div>
+                        `,
+                        showCloseButton: true,
+                        showConfirmButton: false,
+                        width: '600px',
+                        background: '#fff',
+                        backdrop: `rgba(0,0,0,0.5)`,
+                        customClass: { popup: 'rounded-4' }
+                    });
+                } else {
+                    Swal.fire('خطأ', 'تعذر تحميل تفاصيل النتيجة (ربما تم حذفها)', 'error');
+                }
+            } catch (e) {
+                console.error(e);
+                Swal.fire('خطأ', 'حدث خطأ أثناء الاتصال', 'error');
+            }
+        }
+
+        async function downloadResult(resultId) {
+            try {
+                const token = JSON.parse(localStorage.getItem('mylab_tokens') || '{}').access;
+                // Using existing endpoint logic
+                const response = await fetch(`${API_BASE}/api/results/${resultId}/download_pdf/`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (response.ok) {
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `Result_${resultId}.pdf`;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                } else {
+                    Swal.fire({
+                        title: 'عذراً',
+                        text: 'لا يوجد ملف PDF مرفق لهذه النتيجة أو حدث خطأ أثناء التحميل.',
+                        icon: 'info',
+                        confirmButtonText: 'حسناً',
+                        confirmButtonColor: '#FFB88C'
+                    });
+                }
+            } catch (e) {
+                console.error(e);
+                Swal.fire('خطأ', 'حدث خطأ في الاتصال', 'error');
+            }
+        }
+
+        function showRefreshNotification() {
+            loadNotifications(); // Reload data
+            Swal.fire({
+                title: 'تم تحديث الإشعارات',
+                html: '<p style="color: #2d2d2d; font-weight: 600; margin: 1rem 0;">تم التحقق من آخر الإشعارات والتنبيهات</p>',
+                icon: 'success',
+                iconColor: '#FFB88C',
+                confirmButtonText: 'حسناً',
+                confirmButtonColor: '#FFB88C',
+                background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 248, 245, 0.98) 100%)',
+                backdrop: 'rgba(0, 0, 0, 0.4)',
+                showClass: {
+                    popup: 'animate__animated animate__fadeInDown animate__faster'
+                },
+                hideClass: {
+                    popup: 'animate__animated animate__fadeOutUp animate__faster'
+                },
+                customClass: {
+                    popup: 'custom-swal-popup',
+                    title: 'custom-swal-title',
+                    htmlContainer: 'custom-swal-text',
+                    confirmButton: 'custom-swal-button'
+                },
+                didOpen: () => {
+                    // Add custom styles
+                    const style = document.createElement('style');
+                    style.innerHTML = `
+                        .custom-swal-popup {
+                            border-radius: 2rem !important;
+                            border: 2px solid rgba(255, 184, 140, 0.3) !important;
+                            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3) !important;
+                            backdrop-filter: blur(20px) !important;
+                            font-family: 'Tajawal', 'Cairo', sans-serif !important;
+                        }
+                        .custom-swal-title {
+                            color: #000 !important;
+                            font-weight: 900 !important;
+                            font-size: 1.75rem !important;
+                            background: linear-gradient(135deg, #FF1744 0%, #FF8C69 100%);
+                            -webkit-background-clip: text;
+                            -webkit-text-fill-color: transparent;
+                            background-clip: text;
+                        }
+                        .custom-swal-text {
+                            color: #2d2d2d !important;
+                        }
+                        .custom-swal-button {
+                            background: linear-gradient(135deg, #FFB88C 0%, #FF8C69 100%) !important;
+                            border: none !important;
+                            border-radius: 1rem !important;
+                            padding: 0.75rem 2rem !important;
+                            font-weight: 700 !important;
+                            box-shadow: 0 8px 20px rgba(255, 140, 105, 0.3) !important;
+                            transition: all 0.3s ease !important;
+                        }
+                        .custom-swal-button:hover {
+                            transform: translateY(-2px) !important;
+                            box-shadow: 0 12px 30px rgba(255, 140, 105, 0.4) !important;
+                        }
+                        .swal2-icon.swal2-success {
+                            border-color: #FFB88C !important;
+                        }
+                        .swal2-icon.swal2-success [class^='swal2-success-line'] {
+                            background-color: #FFB88C !important;
+                        }
+                        .swal2-icon.swal2-success .swal2-success-ring {
+                            border-color: rgba(255, 184, 140, 0.3) !important;
+                        }
+                    `;
+                    document.head.appendChild(style);
+                }
+            });
+        }
+
+        function logout() {
+            // Show logout confirmation
+            Swal.fire({
+                title: 'تسجيل الخروج',
+                html: '<p style="color: #2d2d2d; font-weight: 600;">هل أنت متأكد من رغبتك في تسجيل الخروج؟</p>',
+                icon: 'question',
+                iconColor: '#FFB88C',
+                showCancelButton: true,
+                confirmButtonText: 'نعم، تسجيل الخروج',
+                cancelButtonText: 'إلغاء',
+                confirmButtonColor: '#FF1744',
+                cancelButtonColor: '#6BA3D9',
+                reverseButtons: true,
+                background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 248, 245, 0.98) 100%)',
+                backdrop: 'rgba(0, 0, 0, 0.4)',
+                customClass: {
+                    popup: 'custom-swal-popup',
+                    title: 'custom-swal-title',
+                    confirmButton: 'custom-swal-button-danger',
+                    cancelButton: 'custom-swal-button-cancel'
+                },
+                didOpen: () => {
+                    const style = document.createElement('style');
+                    style.innerHTML = `
+                        .custom-swal-button-danger {
+                            background: linear-gradient(135deg, #FF1744 0%, #FF5252 100%) !important;
+                            border: none !important;
+                            border-radius: 1rem !important;
+                            padding: 0.75rem 2rem !important;
+                            font-weight: 700 !important;
+                            box-shadow: 0 8px 20px rgba(255, 23, 68, 0.3) !important;
+                        }
+                        .custom-swal-button-cancel {
+                            background: linear-gradient(135deg, #6BA3D9 0%, #8BBCE6 100%) !important;
+                            border: none !important;
+                            border-radius: 1rem !important;
+                            padding: 0.75rem 2rem !important;
+                            font-weight: 700 !important;
+                            box-shadow: 0 8px 20px rgba(107, 163, 217, 0.3) !important;
+                        }
+                    `;
+                    document.head.appendChild(style);
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    localStorage.removeItem('mylab_tokens');
+                    localStorage.removeItem('mylab_user');
+                    localStorage.removeItem('user_info');
+                    window.location.href = '/auth.html';
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

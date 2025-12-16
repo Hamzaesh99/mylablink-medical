@@ -1,0 +1,490 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>النصائح الصحية — MyLabLink</title>
+    <link rel="icon" type="image/x-icon" href="{% static 'images/logo.jpg' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&family=Cairo:wght@300;400;600;700;900&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Tajawal', 'Cairo', sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #FFB88C 0%, #B19CD9 35%, #6BA3D9 70%, #8BBCE6 100%);
+            background-attachment: fixed;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background Particles */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 20% 50%, rgba(255, 184, 140, 0.3), transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(177, 156, 217, 0.3), transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(107, 163, 217, 0.3), transparent 50%),
+                radial-gradient(circle at 60% 70%, rgba(139, 188, 230, 0.2), transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+            animation: floatParticles 25s ease-in-out infinite;
+        }
+
+        @keyframes floatParticles {
+
+            0%,
+            100% {
+                transform: translateY(0px) scale(1);
+                opacity: 0.4;
+            }
+
+            50% {
+                transform: translateY(-30px) scale(1.05);
+                opacity: 0.7;
+            }
+        }
+
+        .dash-grid {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 2rem;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border-radius: 2rem;
+            border: 2px solid rgba(255, 255, 255, 0.35);
+            padding: 2rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            height: fit-content;
+            position: sticky;
+            top: 2rem;
+            animation: fadeInLeft 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .main-area {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border-radius: 2rem;
+            border: 2px solid rgba(255, 255, 255, 0.35);
+            padding: 2.5rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            animation: fadeInUp 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(60px) scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .sidebar .profile {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 1rem;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 1.5rem;
+            margin-bottom: 2rem;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .sidebar .avatar {
+            width: 70px;
+            height: 70px;
+            flex-shrink: 0;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #FF1744 0%, #FF5252 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            box-shadow: 0 8px 20px rgba(255, 23, 68, 0.4);
+        }
+
+        .sidebar a {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: #000000;
+            padding: 1rem 1.5rem;
+            border-radius: 1rem;
+            margin-bottom: 0.5rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-weight: 700;
+        }
+
+        .sidebar a:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(-5px);
+        }
+
+        .sidebar a.active {
+            background: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            color: white;
+        }
+
+        .card-header {
+            background: rgba(255, 255, 255, 0.1);
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+            color: #000000;
+            font-weight: 800;
+        }
+
+        h2,
+        h3,
+        h4,
+        h5 {
+            color: #000000;
+            font-weight: 800;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 900;
+        }
+
+        .stat-label {
+            font-weight: 700;
+            opacity: 0.8;
+        }
+
+        @media (max-width: 768px) {
+            .dash-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: relative;
+                top: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    {% include 'partials/messages.html' %}
+    <div class="dash-grid">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="profile bounce-in">
+                <div class="avatar">
+                    <i class="bi bi-person"></i>
+                </div>
+                <div style="flex: 1;">
+                    <div id="patientName" style="
+                        font-weight: 900; 
+                        color: #000000;
+                        font-size: 1.1rem;
+                        margin-bottom: 0.25rem;
+                        text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                    ">جاري التحميل...</div>
+                    <div style="
+                        background: linear-gradient(135deg, #FF1744 0%, #FF5252 100%);
+                        color: white;
+                        font-size: 0.75rem;
+                        font-weight: 700;
+                        padding: 0.25rem 0.75rem;
+                        border-radius: 2rem;
+                        display: inline-block;
+                        box-shadow: 0 4px 15px rgba(255, 23, 68, 0.3);
+                    ">مريض</div>
+                </div>
+            </div>
+
+            <nav class="sidebar-top">
+
+                <a href="dashboard_patient.html" class="slide-in">
+                    <i class="bi bi-card-list"></i>
+                    <span>النتائج</span>
+                </a>
+
+                <a href="tips_patient.html" class="active slide-in" style="animation-delay: 0.3s;">
+                    <i class="bi bi-lightbulb"></i>
+                    <span>نصائح صحية</span>
+                </a>
+                <a href="notifications_patient.html" class="slide-in" style="animation-delay: 0.4s;">
+                    <i class="bi bi-bell"></i>
+                    <span>الإشعارات</span>
+                    <span id="sidebarNotificationBadge" class="badge-critical pulse" style="display:none;">0</span>
+                </a>
+                <a href="settings_patient.html" class="slide-in" style="animation-delay: 0.45s;">
+                    <i class="bi bi-gear"></i>
+                    <span>الإعدادات</span>
+                </a>
+                <a href="/auth.html" class="slide-in" style="animation-delay: 0.5s;"
+                    onclick="event.preventDefault(); logout();">
+                    <i class="bi bi-box-arrow-left"></i>
+                    <span>الخروج</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <section class="main-area">
+            <div class="d-flex justify-content-between align-items-center mb-4 animate-up">
+                <div>
+                    <h2 class="mb-1">نصائح صحية مخصصة</h2>
+                    <p class="text-muted">توصيات صحية بناءً على نتائج تحاليلك</p>
+                </div>
+            </div>
+
+            <!-- Health Tips Cards -->
+            <div class="row g-4">
+                <!-- Tip Card 1 -->
+                <div class="col-md-6">
+                    <div class="card animate-up" style="animation-delay: 0.1s;">
+                        <div class="card-body p-4">
+                            <div class="d-flex align-items-center mb-3">
+                                <div style="
+                                    width: 60px;
+                                    height: 60px;
+                                    background: linear-gradient(135deg, #6BA3D9 0%, #8BBCE6 100%);
+                                    border-radius: 50%;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    box-shadow: 0 8px 20px rgba(107, 163, 217, 0.3);
+                                    margin-left: 1rem;
+                                ">
+                                    <i class="bi bi-droplet-fill" style="font-size: 1.8rem; color: white;"></i>
+                                </div>
+                                <div>
+                                    <h5 class="mb-0">شرب الماء</h5>
+                                    <small class="text-muted">نصيحة عامة</small>
+                                </div>
+                            </div>
+                            <p class="mb-0" style="color: #2d2d2d; font-weight: 600; line-height: 1.8;">
+                                احرص على شرب 8-10 أكواب من الماء يومياً لتحسين وظائف الكلى والحفاظ على توازن السوائل في
+                                الجسم.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tip Card 2 -->
+                <div class="col-md-6">
+                    <div class="card animate-up" style="animation-delay: 0.2s;">
+                        <div class="card-body p-4">
+                            <div class="d-flex align-items-center mb-3">
+                                <div style="
+                                    width: 60px;
+                                    height: 60px;
+                                    background: linear-gradient(135deg, #FF1744 0%, #FF5252 100%);
+                                    border-radius: 50%;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    box-shadow: 0 8px 20px rgba(255, 23, 68, 0.3);
+                                    margin-left: 1rem;
+                                ">
+                                    <i class="bi bi-heart-pulse-fill" style="font-size: 1.8rem; color: white;"></i>
+                                </div>
+                                <div>
+                                    <h5 class="mb-0">النشاط البدني</h5>
+                                    <small class="text-muted">مهم جداً</small>
+                                </div>
+                            </div>
+                            <p class="mb-0" style="color: #2d2d2d; font-weight: 600; line-height: 1.8;">
+                                مارس التمارين الرياضية لمدة 30 دقيقة يومياً على الأقل لتحسين صحة القلب والأوعية الدموية.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tip Card 3 -->
+                <div class="col-md-6">
+                    <div class="card animate-up" style="animation-delay: 0.3s;">
+                        <div class="card-body p-4">
+                            <div class="d-flex align-items-center mb-3">
+                                <div style="
+                                    width: 60px;
+                                    height: 60px;
+                                    background: linear-gradient(135deg, #FFB88C 0%, #FF8C69 100%);
+                                    border-radius: 50%;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    box-shadow: 0 8px 20px rgba(255, 184, 140, 0.3);
+                                    margin-left: 1rem;
+                                ">
+                                    <i class="bi bi-egg-fill" style="font-size: 1.8rem; color: white;"></i>
+                                </div>
+                                <div>
+                                    <h5 class="mb-0">التغذية المتوازنة</h5>
+                                    <small class="text-muted">ضروري</small>
+                                </div>
+                            </div>
+                            <p class="mb-0" style="color: #2d2d2d; font-weight: 600; line-height: 1.8;">
+                                تناول غذاء صحي متنوع يحتوي على الفواكه والخضروات والبروتينات والحبوب الكاملة.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tip Card 4 -->
+                <div class="col-md-6">
+                    <div class="card animate-up" style="animation-delay: 0.4s;">
+                        <div class="card-body p-4">
+                            <div class="d-flex align-items-center mb-3">
+                                <div style="
+                                    width: 60px;
+                                    height: 60px;
+                                    background: linear-gradient(135deg, #B19CD9 0%, #9B7CC6 100%);
+                                    border-radius: 50%;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    box-shadow: 0 8px 20px rgba(177, 156, 217, 0.3);
+                                    margin-left: 1rem;
+                                ">
+                                    <i class="bi bi-moon-stars-fill" style="font-size: 1.8rem; color: white;"></i>
+                                </div>
+                                <div>
+                                    <h5 class="mb-0">النوم الجيد</h5>
+                                    <small class="text-muted">أساسي</small>
+                                </div>
+                            </div>
+                            <p class="mb-0" style="color: #2d2d2d; font-weight: 600; line-height: 1.8;">
+                                احصل على 7-8 ساعات من النوم الجيد ليلاً لتعزيز المناعة وتحسين الصحة العامة.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Important Notice Box -->
+            <div class="card animate-up mt-4"
+                style="animation-delay: 0.5s; border: 2px solid rgba(255, 184, 140, 0.4);">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-start gap-3">
+                        <i class="bi bi-info-circle-fill" style="font-size: 2rem; color: #FFB88C;"></i>
+                        <div>
+                            <h5 class="mb-2">ملاحظة هامة</h5>
+                            <p class="mb-0" style="color: #2d2d2d; font-weight: 600; line-height: 1.8;">
+                                هذه النصائح عامة وتهدف للحفاظ على الصحة العامة. لنصائح طبية مخصصة بناءً على حالتك الصحية
+                                ونتائج تحاليلك،
+                                يرجى استشارة الطبيب المعالج.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            loadPatientInfo();
+        });
+
+        function loadPatientInfo() {
+            const userInfo = localStorage.getItem('user_info');
+            if (userInfo) {
+                try {
+                    const user = JSON.parse(userInfo);
+
+                    // Update Name
+                    const displayName = (user.first_name && user.last_name)
+                        ? `${user.first_name} ${user.last_name}`
+                        : (user.name || user.username || 'مريض');
+                    document.getElementById('patientName').textContent = `أهلاً، ${displayName}`;
+
+                    // Update Avatar Logic
+                    const avatarDiv = document.querySelector('.sidebar .avatar');
+                    if (avatarDiv) {
+                        let avatarUrl = user.avatar;
+                        if (!avatarUrl) {
+                            // Generate fallback avatar
+                            avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=FF1744&color=fff&size=128&bold=true`;
+                        }
+
+                        // Replace content with img, preserving parent styling
+                        avatarDiv.innerHTML = `<img src="${avatarUrl}" alt="Profile" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%; position: relative; z-index: 2;">`;
+                    }
+
+                } catch (e) { console.error(e); }
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('mylab_tokens');
+            localStorage.removeItem('mylab_user');
+            localStorage.removeItem('user_info');
+            window.location.href = '/auth.html';
+        }
+    </script>
+</body>
+
+</html>

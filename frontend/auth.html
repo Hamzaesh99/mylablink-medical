@@ -1,0 +1,1802 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الدخول - MyLabLink</title>
+    <link rel="icon" type="image/x-icon" href="/static/images/logo.jpg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&family=Cairo:wght@300;400;600;700;900&display=swap"
+        rel="stylesheet">
+    <script>
+        // Set API base URL for frontend
+        window.API_BASE = 'http://127.0.0.1:8000';
+    </script>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Tajawal', 'Cairo', sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #FFB88C 0%, #B19CD9 35%, #6BA3D9 70%, #8BBCE6 100%);
+            background-attachment: fixed;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background Particles */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 20% 50%, rgba(255, 184, 140, 0.3), transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(177, 156, 217, 0.3), transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(107, 163, 217, 0.3), transparent 50%),
+                radial-gradient(circle at 60% 70%, rgba(139, 188, 230, 0.2), transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+            animation: floatParticles 25s ease-in-out infinite;
+        }
+
+        @keyframes floatParticles {
+
+            0%,
+            100% {
+                opacity: 0.4;
+                transform: translateY(0px) scale(1);
+            }
+
+            50% {
+                opacity: 0.7;
+                transform: translateY(-30px) scale(1.05);
+            }
+        }
+
+        .auth-wrapper {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .auth-container {
+            max-width: 1200px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border-radius: 2.5rem;
+            border: 2px solid rgba(255, 255, 255, 0.35);
+            box-shadow:
+                0 40px 100px rgba(0, 0, 0, 0.35),
+                inset 0 1px 0 rgba(255, 255, 255, 0.4);
+            overflow: hidden;
+            animation: fadeInUp 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(60px) scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .auth-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 700px;
+        }
+
+        /* Features Section */
+        .features-section {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.25), rgba(124, 77, 255, 0.25));
+            padding: 3.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .features-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3Cpattern id='dots' width='20' height='20' patternUnits='userSpaceOnUse'%3E%3Ccircle cx='10' cy='10' r='1.5' fill='white' opacity='0.15'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='100' height='100' fill='url(%23dots)'/%3E%3C/svg%3E");
+            pointer-events: none;
+            animation: patternMove 30s linear infinite;
+        }
+
+        @keyframes patternMove {
+            0% {
+                transform: translateY(0);
+            }
+
+            100% {
+                transform: translateY(20px);
+            }
+        }
+
+        .logo-section {
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .logo-icon {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 1.5rem;
+            background: linear-gradient(135deg, #FF1744 0%, #F50057 50%, #F59E0B 100%);
+            border-radius: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            box-shadow:
+                0 20px 50px rgba(255, 23, 68, 0.5),
+                0 0 0 8px rgba(255, 255, 255, 0.1),
+                inset 0 2px 0 rgba(255, 255, 255, 0.3);
+            animation: pulse-logo 3s ease-in-out infinite;
+            position: relative;
+        }
+
+        .logo-icon::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shine 4s ease-in-out infinite;
+        }
+
+        @keyframes shine {
+
+            0%,
+            100% {
+                transform: translateX(-100%) translateY(-100%) rotate(45deg);
+            }
+
+            50% {
+                transform: translateX(100%) translateY(100%) rotate(45deg);
+            }
+        }
+
+        .logo-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: relative;
+            z-index: 1;
+        }
+
+        .auth-logo {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.3);
+            animation: logoFloat 3s ease-in-out infinite;
+            transition: all 0.3s ease;
+        }
+
+        .auth-logo:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 18px 45px rgba(0, 0, 0, 0.4);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        @keyframes logoFloat {
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @keyframes pulse-logo {
+
+            0%,
+            100% {
+                transform: scale(1);
+                box-shadow:
+                    0 20px 50px rgba(255, 23, 68, 0.5),
+                    0 0 0 8px rgba(255, 255, 255, 0.1);
+            }
+
+            50% {
+                transform: scale(1.05);
+                box-shadow:
+                    0 25px 70px rgba(255, 23, 68, 0.7),
+                    0 0 0 12px rgba(255, 255, 255, 0.15);
+            }
+        }
+
+        .logo-title {
+            font-size: 2.8rem;
+            font-weight: 900;
+            color: #000000;
+            text-shadow:
+                0 2px 8px rgba(255, 255, 255, 0.8),
+                0 1px 3px rgba(255, 255, 255, 0.6);
+            margin-bottom: 0.75rem;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-subtitle {
+            color: #1a1a1a;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-shadow: 0 1px 3px rgba(255, 255, 255, 0.5);
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            padding: 1.5rem;
+            border-radius: 1.25rem;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            z-index: 2;
+            margin-bottom: 1.25rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .feature-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(-10px) scale(1.02);
+            box-shadow:
+                0 15px 40px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .feature-icon {
+            width: 4rem;
+            height: 4rem;
+            border-radius: 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            color: white;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            transition: all 0.4s ease;
+            flex-shrink: 0;
+        }
+
+        .feature-item:hover .feature-icon {
+            transform: rotate(5deg) scale(1.1);
+        }
+
+        .feature-icon.icon-1 {
+            background: linear-gradient(135deg, #FF1744, #FF5252);
+        }
+
+        .feature-icon.icon-2 {
+            background: linear-gradient(135deg, #7C4DFF, #B388FF);
+        }
+
+        .feature-icon.icon-3 {
+            background: linear-gradient(135deg, #00BFA5, #64FFDA);
+        }
+
+        .feature-content h4 {
+            color: #000000;
+            font-weight: 800;
+            font-size: 1.2rem;
+            margin-bottom: 0.35rem;
+            text-shadow: 0 1px 3px rgba(255, 255, 255, 0.5);
+        }
+
+        .feature-content p {
+            color: #1a1a1a;
+            font-size: 0.95rem;
+            margin: 0;
+            line-height: 1.5;
+            font-weight: 500;
+        }
+
+        /* Form Section */
+        .form-section {
+            background: rgba(255, 255, 255, 0.98);
+            padding: 3.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .auth-tabs {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.08), rgba(118, 75, 162, 0.08));
+            padding: 0.6rem;
+            border-radius: 60px;
+            display: flex;
+            gap: 0.6rem;
+            margin-bottom: 2.5rem;
+            border: 1px solid rgba(102, 126, 234, 0.15);
+        }
+
+        .auth-tab {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 0.9rem 1.75rem;
+            border-radius: 60px;
+            font-weight: 800;
+            font-size: 1rem;
+            color: #000000;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .auth-tab::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: -1;
+        }
+
+        .auth-tab.active::before {
+            opacity: 1;
+        }
+
+        .auth-tab.active {
+            color: white;
+            box-shadow:
+                0 8px 25px rgba(102, 126, 234, 0.45),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            transform: scale(1.03);
+        }
+
+        .auth-tab:hover:not(.active) {
+            background: rgba(102, 126, 234, 0.1);
+            transform: scale(1.02);
+        }
+
+        .form-title {
+            font-size: 2.3rem;
+            font-weight: 900;
+            color: #000000;
+            margin-bottom: 0.75rem;
+            letter-spacing: -0.5px;
+            text-shadow: 0 1px 2px rgba(102, 126, 234, 0.3);
+        }
+
+        .form-subtitle {
+            color: #2d2d2d;
+            margin-bottom: 2.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        /* Account Type Toggle */
+        .account-type-toggle {
+            display: flex;
+            gap: 1.25rem;
+            margin-bottom: 2rem;
+        }
+
+        .account-type-toggle input {
+            display: none;
+        }
+
+        .account-type-toggle label {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.9rem;
+            padding: 1.25rem;
+            border-radius: 1.25rem;
+            border: 2.5px solid #E0E0E0;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            font-weight: 800;
+            background: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .account-type-toggle label::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.15), transparent);
+            transition: left 0.6s;
+        }
+
+        .account-type-toggle label:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 35px rgba(102, 126, 234, 0.25);
+            border-color: #667eea;
+        }
+
+        .account-type-toggle label:hover::before {
+            left: 100%;
+        }
+
+        .account-type-toggle input:checked+label {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #667eea;
+            box-shadow:
+                0 12px 35px rgba(102, 126, 234, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            transform: translateY(-4px) scale(1.03);
+        }
+
+        .account-type-toggle label i {
+            font-size: 1.4rem;
+        }
+
+        /* Input Group with Fixed Label Above */
+        .input-group-float {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group-float label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-size: 0.95rem;
+            font-weight: 700;
+            padding-right: 0.25rem;
+        }
+
+        .input-group-float .input-wrapper {
+            position: relative;
+        }
+
+        .input-group-float input {
+            width: 100%;
+            padding: 1rem 3rem 1rem 2.5rem;
+            border: 2.5px solid #E0E0E0;
+            border-radius: 1rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+            font-weight: 500;
+            color: #000000;
+        }
+
+        .input-group-float input::placeholder {
+            color: #BDBDBD;
+            font-weight: 400;
+        }
+
+        .input-group-float input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow:
+                0 0 0 4px rgba(102, 126, 234, 0.15),
+                0 6px 16px rgba(102, 126, 234, 0.1);
+        }
+
+        .input-group-float input:hover:not(:focus) {
+            border-color: #BDBDBD;
+        }
+
+        /* Handle autofill background */
+        .input-group-float input:-webkit-autofill,
+        .input-group-float input:-webkit-autofill:hover,
+        .input-group-float input:-webkit-autofill:focus {
+            -webkit-box-shadow: 0 0 0 30px white inset !important;
+            -webkit-text-fill-color: #000000 !important;
+            border-color: #667eea;
+        }
+
+        .input-group-float .input-icon {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9E9E9E;
+            font-size: 1.1rem;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+
+        .input-group-float input:focus~.input-icon {
+            color: #667eea;
+        }
+
+        .input-group-float .toggle-password {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9E9E9E;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+        }
+
+        .input-group-float .toggle-password:hover {
+            color: #667eea;
+        }
+
+        /* Password Strength Indicator */
+        .password-strength {
+            height: 5px;
+            background: #E0E0E0;
+            border-radius: 3px;
+            margin-top: -1.25rem;
+            margin-bottom: 1.25rem;
+            overflow: hidden;
+            display: none;
+        }
+
+        .password-strength.show {
+            display: block;
+        }
+
+        .password-strength-bar {
+            height: 100%;
+            width: 0;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            border-radius: 3px;
+        }
+
+        .password-strength-bar.weak {
+            width: 33%;
+            background: linear-gradient(90deg, #FF1744, #FF5252);
+        }
+
+        .password-strength-bar.medium {
+            width: 66%;
+            background: linear-gradient(90deg, #FFD600, #FFC107);
+        }
+
+        .password-strength-bar.strong {
+            width: 100%;
+            background: linear-gradient(90deg, #00E676, #00C853);
+        }
+
+        /* Error Message */
+        .error-message {
+            color: #FF1744;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-top: -1.25rem;
+            margin-bottom: 1.25rem;
+            display: none;
+            animation: shake 0.4s ease;
+            padding: 0.75rem 1rem;
+            background: rgba(255, 23, 68, 0.1);
+            border-radius: 0.75rem;
+            border-right: 4px solid #FF1744;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-12px);
+            }
+
+            75% {
+                transform: translateX(12px);
+            }
+        }
+
+        /* Submit Button */
+        .btn-submit {
+            width: 100%;
+            padding: 1.15rem;
+            border: none;
+            border-radius: 1.25rem;
+            background: linear-gradient(135deg, #FF1744 0%, #FF5252 50%, #FF6E40 100%);
+            color: white;
+            font-weight: 800;
+            font-size: 1.05rem;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow:
+                0 15px 40px rgba(255, 23, 68, 0.45),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 0.75px;
+        }
+
+        .btn-submit::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.35);
+            transform: translate(-50%, -50%);
+            transition: width 0.7s, height 0.7s;
+        }
+
+        .btn-submit:hover::before {
+            width: 500px;
+            height: 500px;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow:
+                0 25px 60px rgba(255, 23, 68, 0.6),
+                inset 0 1px 0 rgba(255, 255, 255, 0.4);
+        }
+
+        .btn-submit:active {
+            transform: translateY(-2px) scale(0.98);
+        }
+
+        .btn-submit i {
+            margin-left: 0.5rem;
+        }
+
+        /* Generate Password Button */
+        .btn-generate-password {
+            padding: 0.5rem 1rem;
+            border: none;
+            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+            color: white;
+            border-radius: 0.75rem;
+            font-weight: 700;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-generate-password:hover {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
+        }
+
+        /* Forgot Password Link */
+        .forgot-password {
+            text-align: center;
+            margin: 1.25rem 0;
+        }
+
+        .forgot-password a {
+            color: #000000;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            position: relative;
+            display: inline-block;
+        }
+
+        .forgot-password a::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 0;
+            height: 2.5px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            border-radius: 2px;
+        }
+
+        .forgot-password a:hover::after {
+            width: 100%;
+        }
+
+        .forgot-password a:hover {
+            color: #764ba2;
+        }
+
+        .forgot-password a i {
+            margin-left: 0.35rem;
+        }
+
+        /* Toggle Text */
+        .toggle-text {
+            text-align: center;
+            color: #2d2d2d;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-top: 1.5rem;
+        }
+
+        .toggle-text a {
+            color: #000000;
+            font-weight: 800;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .toggle-text a:hover {
+            color: #764ba2;
+            text-decoration: underline;
+        }
+
+        /* Auth message (success / error) */
+        #auth-message {
+            padding: 1rem 1.25rem;
+            margin-bottom: 1.5rem;
+            border-radius: 1rem;
+            font-weight: 700;
+            font-size: 0.95rem;
+            display: none;
+            text-align: center;
+            animation: slideDown 0.4s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-15px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        #auth-message.success {
+            background: linear-gradient(135deg, #d4edda, #c3e6cb);
+            color: #155724;
+            border: 2px solid #c3e6cb;
+            box-shadow: 0 8px 20px rgba(21, 87, 36, 0.15);
+        }
+
+        #auth-message.error {
+            background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+            color: #721c24;
+            border: 2px solid #f5c6cb;
+            box-shadow: 0 8px 20px rgba(114, 28, 36, 0.15);
+        }
+
+        /* Form Animations */
+        .form-content {
+            animation: slideIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Password hint styling */
+        .password-hint {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: -1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .password-hint small {
+            color: #757575;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .auth-row {
+                grid-template-columns: 1fr;
+            }
+
+            .features-section {
+                display: none;
+            }
+
+            .auth-container {
+                max-width: 550px;
+            }
+
+            .form-section {
+                padding: 2.5rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .auth-wrapper {
+                padding: 1rem;
+            }
+
+            .form-section {
+                padding: 2rem 1.5rem;
+            }
+
+            .form-title {
+                font-size: 1.9rem;
+            }
+
+            .logo-title {
+                font-size: 2.2rem;
+            }
+
+            .account-type-toggle {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .auth-tabs {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .auth-tab {
+                width: 100%;
+            }
+        }
+
+        /* ===== VERIFICATION MODAL STYLES ===== */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+            padding: 1rem;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .verification-modal {
+            background: white;
+            border-radius: 2rem;
+            max-width: 500px;
+            width: 100%;
+            overflow: hidden;
+            box-shadow: 0 40px 120px rgba(0, 0, 0, 0.5);
+            transform: scale(0.8) translateY(30px);
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+        }
+
+        .modal-overlay.active .verification-modal {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 2.5rem 2rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .modal-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
+            animation: pulse-modal 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse-modal {
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 0.5;
+            }
+
+            50% {
+                transform: scale(1.3);
+                opacity: 0.8;
+            }
+        }
+
+        .modal-icon {
+            width: 90px;
+            height: 90px;
+            margin: 0 auto 1.25rem;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 2;
+            animation: bounce-icon 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce-icon {
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .modal-icon i {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .modal-title {
+            color: white;
+            font-size: 1.75rem;
+            font-weight: 900;
+            margin: 0;
+            position: relative;
+            z-index: 2;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-body {
+            padding: 2.5rem 2rem;
+            text-align: center;
+        }
+
+        .modal-body p {
+            color: #2d2d2d;
+            font-size: 1.05rem;
+            line-height: 1.7;
+            margin: 0 0 1.5rem;
+            font-weight: 500;
+        }
+
+        .modal-email {
+            color: #667eea;
+            font-weight: 800;
+            font-size: 1.1rem;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            padding: 0.75rem 1.25rem;
+            border-radius: 0.75rem;
+            display: inline-block;
+            margin: 0.5rem 0 1.5rem;
+            border: 2px solid rgba(102, 126, 234, 0.2);
+        }
+
+        .modal-instructions {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.08), rgba(5, 150, 105, 0.08));
+            padding: 1.25rem 1.5rem;
+            border-radius: 1rem;
+            border-right: 4px solid #10B981;
+            margin: 1.5rem 0;
+            text-align: right;
+        }
+
+        .modal-instructions ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .modal-instructions li {
+            color: #1a1a1a;
+            font-size: 0.95rem;
+            font-weight: 600;
+            padding: 0.5rem 0;
+            padding-right: 1.75rem;
+            position: relative;
+        }
+
+        .modal-instructions li::before {
+            content: '✓';
+            position: absolute;
+            right: 0;
+            color: #10B981;
+            font-weight: 900;
+            font-size: 1.1rem;
+        }
+
+        .modal-footer {
+            padding: 0 2rem 2.5rem;
+            text-align: center;
+        }
+
+        .btn-modal-close {
+            width: 100%;
+            padding: 1.15rem;
+            border: none;
+            border-radius: 1rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: 800;
+            font-size: 1.05rem;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-modal-close:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.6);
+        }
+
+        .btn-modal-close:active {
+            transform: translateY(-1px) scale(0.98);
+        }
+
+        .modal-note {
+            color: #757575;
+            font-size: 0.85rem;
+            margin-top: 1rem;
+            font-weight: 500;
+        }
+
+        @media (max-width: 576px) {
+            .verification-modal {
+                margin: 1rem;
+            }
+
+            .modal-header {
+                padding: 2rem 1.5rem 1.5rem;
+            }
+
+            .modal-body {
+                padding: 2rem 1.5rem;
+            }
+
+            .modal-footer {
+                padding: 0 1.5rem 2rem;
+            }
+
+            .modal-title {
+                font-size: 1.5rem;
+            }
+
+            .modal-icon {
+                width: 75px;
+                height: 75px;
+            }
+
+            .modal-icon i {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="auth-wrapper">
+        <div class="auth-container">
+            <div class="auth-row">
+                <!-- Features Section -->
+                <div class="features-section">
+                    <div class="logo-section" style="text-align: center; margin-bottom: 2rem;">
+                        <div class="logo-icon">
+                            <img src="/static/images/logo.jpg" alt="MyLabLink" class="auth-logo"
+                                data-fallback="/static/images/mylab.png"
+                                onerror="this.onerror=null; this.src=this.dataset.fallback;">
+                        </div>
+                    </div>
+                    <div class="logo-title">
+                        <span>MyLabLink</span>
+                    </div>
+                    <p class="logo-subtitle">منصة ذكية لإدارة نتائج المختبرات الطبية</p>
+                    <div class="features-list">
+                        <div class="feature-item">
+                            <div class="feature-icon icon-1">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <div class="feature-content">
+                                <h4>أمان متقدم</h4>
+                                <p>حماية بيانات المرضى بأعلى معايير الأمان</p>
+                            </div>
+                        </div>
+
+                        <div class="feature-item">
+                            <div class="feature-icon icon-2">
+                                <i class="fas fa-file-medical"></i>
+                            </div>
+                            <div class="feature-content">
+                                <h4>إدارة الفحوصات الطبية</h4>
+                                <p>إدارة الفحوصات الطبية بسهولة وسرعة</p>
+                            </div>
+                        </div>
+
+                        <div class="feature-item">
+                            <div class="feature-icon icon-3">
+                                <i class="fas fa-user-md"></i>
+                            </div>
+                            <div class="feature-content">
+                                <h4>إدارة الأطباء والموظفين</h4>
+                                <p>إدارة الأطباء والموظفين بسهولة وسرعة</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Section -->
+                <div class="form-section">
+                    <div class="auth-tabs">
+                        <button class="auth-tab active" data-tab="login">تسجيل الدخول</button>
+                        <button class="auth-tab" data-tab="register">إنشاء حساب</button>
+                    </div>
+
+                    <!-- Login Form -->
+                    <div class="form-content" id="login-form">
+                        <h2 class="form-title">تسجيل الدخول</h2>
+                        <p class="form-subtitle">ادخل بياناتك لتسجيل الدخول</p>
+
+                        <div id="auth-message"></div>
+
+                        <form id="login-form-element">
+                            <div class="input-group-float">
+                                <label for="login-email">البريد الإلكتروني</label>
+                                <div class="input-wrapper">
+                                    <input id="login-email" type="email" name="email"
+                                        placeholder="أدخل بريدك الإلكتروني" required>
+                                    <i class="fas fa-envelope input-icon"></i>
+                                </div>
+                            </div>
+
+                            <div class="input-group-float">
+                                <label for="login-password">كلمة المرور</label>
+                                <div class="input-wrapper">
+                                    <input type="password" name="password" id="login-password"
+                                        placeholder="أدخل كلمة المرور" required>
+                                    <i class="fas fa-lock input-icon"></i>
+                                    <i class="fas fa-eye toggle-password"
+                                        onclick="togglePassword('login-password', this)"></i>
+                                </div>
+                            </div>
+                            <div class="error-message" id="login-error"></div>
+
+                            <button type="submit" class="btn-submit">
+                                <i class="fas fa-sign-in-alt"></i> تسجيل الدخول
+                            </button>
+                        </form>
+
+                        <div class="forgot-password">
+                            <a href="/reset-password/"><i class="fas fa-key"></i> نسيت كلمة المرور؟</a>
+                        </div>
+
+                        <div class="toggle-text">
+                            ليس لديك حساب؟ <a href="#" onclick="switchTab('register'); return false;">إنشاء حساب
+                                جديد</a>
+                        </div>
+                    </div>
+
+                    <!-- Register Form -->
+                    <div class="form-content" id="register-form" style="display: none;">
+                        <h2 class="form-title">إنشاء حساب جديد</h2>
+                        <p class="form-subtitle">انضم إلينا وابدأ رحلتك الآن</p>
+
+                        <form id="register-form-element">
+                            <!-- Account Type Toggle -->
+                            <div class="account-type-toggle">
+                                <input type="radio" name="account_type" id="patient" value="patient" checked>
+                                <label for="patient">
+                                    <i class="fas fa-user"></i>
+                                    <span>مريض</span>
+                                </label>
+
+                                <input type="radio" name="account_type" id="doctor" value="doctor">
+                                <label for="doctor">
+                                    <i class="fas fa-user-md"></i>
+                                    <span>طبيب</span>
+                                </label>
+                            </div>
+
+                            <div class="input-group-float">
+                                <label for="register-fullname">الاسم الكامل</label>
+                                <div class="input-wrapper">
+                                    <input id="register-fullname" type="text" name="fullname"
+                                        placeholder="أدخل اسمك الكامل" required>
+                                    <i class="fas fa-user input-icon"></i>
+                                </div>
+                            </div>
+
+                            <div class="input-group-float">
+                                <label for="register-email">البريد الإلكتروني</label>
+                                <div class="input-wrapper">
+                                    <input id="register-email" type="email" name="email"
+                                        placeholder="أدخل بريدك الإلكتروني" required>
+                                    <i class="fas fa-envelope input-icon"></i>
+                                </div>
+                            </div>
+
+                            <div class="input-group-float">
+                                <label for="register-password">كلمة المرور</label>
+                                <div class="input-wrapper">
+                                    <input type="password" name="password" id="register-password"
+                                        placeholder="أدخل كلمة المرور" required
+                                        oninput="checkPasswordStrength(this.value)">
+                                    <i class="fas fa-lock input-icon"></i>
+                                    <i class="fas fa-eye toggle-password"
+                                        onclick="togglePassword('register-password', this)"></i>
+                                </div>
+                            </div>
+                            <div class="password-strength" id="password-strength">
+                                <div class="password-strength-bar" id="strength-bar"></div>
+                            </div>
+                            <div class="password-hint">
+                                <small>اختر كلمة مرور قوية تحتوي على حروف، أرقام ورموز.</small>
+                                <button type="button" id="btn-generate-password" class="btn-generate-password">
+                                    توليد كلمة مرور
+                                </button>
+                            </div>
+
+                            <div class="input-group-float">
+                                <label for="confirm-password">تأكيد كلمة المرور</label>
+                                <div class="input-wrapper">
+                                    <input type="password" name="confirm_password" id="confirm-password"
+                                        placeholder="أعد إدخال كلمة المرور" required>
+                                    <i class="fas fa-lock input-icon"></i>
+                                    <i class="fas fa-eye toggle-password"
+                                        onclick="togglePassword('confirm-password', this)"></i>
+                                </div>
+                            </div>
+                            <div class="error-message" id="register-error"></div>
+
+                            <button type="submit" class="btn-submit">
+                                <i class="fas fa-user-plus"></i> إنشاء الحساب
+                            </button>
+                        </form>
+
+                        <div class="toggle-text">
+                            لديك حساب بالفعل؟ <a href="#" onclick="switchTab('login'); return false;">تسجيل الدخول</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        window.API_BASE = 'http://127.0.0.1:8000';
+    </script>
+
+    <script type="module">
+        // Import Auth functions using absolute path
+        import { login, register } from '/static/js/api-auth.js';
+
+        // Make them globally available
+        window.AuthModule = { login, register };
+        window.Auth = { login, register };
+        console.log('Auth module loaded successfully');
+    </script>
+
+    <script>
+        // Switch between login and register tabs
+        function switchTab(tab) {
+            const tabs = document.querySelectorAll('.auth-tab');
+            const loginForm = document.getElementById('login-form');
+            const registerForm = document.getElementById('register-form');
+
+            tabs.forEach(t => {
+                if (t.dataset.tab === tab) {
+                    t.classList.add('active');
+                } else {
+                    t.classList.remove('active');
+                }
+            });
+
+            if (tab === 'login') {
+                if (loginForm) loginForm.style.display = 'block';
+                if (registerForm) registerForm.style.display = 'none';
+            } else {
+                if (loginForm) loginForm.style.display = 'none';
+                if (registerForm) registerForm.style.display = 'block';
+            }
+        }
+
+        // Tab click handlers
+        document.querySelectorAll('.auth-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                switchTab(tab.dataset.tab);
+            });
+        });
+
+        // Toggle password visibility
+        function togglePassword(inputId, icon) {
+            const input = document.getElementById(inputId);
+            if (!input) return;
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+
+        // Password strength checker
+        function checkPasswordStrength(password) {
+            const strengthBar = document.getElementById('strength-bar');
+            const strengthContainer = document.getElementById('password-strength');
+
+            if (!strengthBar || !strengthContainer) return;
+
+            if (password.length === 0) {
+                strengthContainer.classList.remove('show');
+                return;
+            }
+
+            strengthContainer.classList.add('show');
+
+            let strength = 0;
+            if (password.length >= 8) strength++;
+            if (password.match(/[a-z]/) && password.match(/[A-Z]/)) strength++;
+            if (password.match(/[0-9]/)) strength++;
+            if (password.match(/[^a-zA-Z0-9]/)) strength++;
+
+            strengthBar.className = 'password-strength-bar';
+
+            if (strength <= 2) {
+                strengthBar.classList.add('weak');
+            } else if (strength === 3) {
+                strengthBar.classList.add('medium');
+            } else {
+                strengthBar.classList.add('strong');
+            }
+        }
+
+        // مولّد كلمة مرور قوية عشوائية
+        function generateStrongPassword(length = 14) {
+            const upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            const lower = 'abcdefghijklmnopqrstuvwxyz';
+            const digits = '0123456789';
+            const symbols = '!@#$%^&*()_-+=[]{}|;:,.<>?';
+
+            const all = upper + lower + digits + symbols;
+            let password = '';
+
+            // ضمان وجود على الأقل نوع واحد من كل مجموعة
+            password += upper[Math.floor(Math.random() * upper.length)];
+            password += lower[Math.floor(Math.random() * lower.length)];
+            password += digits[Math.floor(Math.random() * digits.length)];
+            password += symbols[Math.floor(Math.random() * symbols.length)];
+
+            for (let i = password.length; i < length; i++) {
+                password += all[Math.floor(Math.random() * all.length)];
+            }
+
+            // خلط الأحرف
+            return password
+                .split('')
+                .sort(() => Math.random() - 0.5)
+                .join('');
+        }
+
+        // ربط زر توليد كلمة المرور بالحقول
+        const generateBtn = document.getElementById('btn-generate-password');
+        if (generateBtn) {
+            generateBtn.addEventListener('click', () => {
+                const pwd = generateStrongPassword();
+                const pwdInput = document.getElementById('register-password');
+                const confirmInput = document.getElementById('confirm-password');
+
+                if (pwdInput) {
+                    pwdInput.value = pwd;
+                    checkPasswordStrength(pwd);
+                }
+                if (confirmInput) {
+                    confirmInput.value = pwd;
+                }
+            });
+        }
+
+        // Form validation (تطابق كلمة المرور والتأكيد)
+        document.querySelectorAll('form').forEach(form => {
+            form.addEventListener('submit', (e) => {
+                const formContent = form.closest('.form-content');
+                if (!formContent) return;
+
+                const formId = formContent.id;
+                const errorElement = document.getElementById(formId === 'login-form' ? 'login-error' : 'register-error');
+
+                if (formId === 'register-form') {
+                    const password = document.getElementById('register-password')?.value || '';
+                    const confirmPassword = document.getElementById('confirm-password')?.value || '';
+
+                    if (password !== confirmPassword) {
+                        e.preventDefault();
+                        if (errorElement) {
+                            errorElement.textContent = 'كلمتا المرور غير متطابقتين';
+                            errorElement.classList.add('show');
+                        }
+                        return;
+                    }
+                }
+
+                if (errorElement) {
+                    errorElement.classList.remove('show');
+                }
+            });
+        });
+
+        // عرض رسائل النجاح/الفشل في أعلى فورم تسجيل الدخول
+        function showAuthMessage(message, type = 'success') {
+            const msgDiv = document.getElementById('auth-message');
+            if (!msgDiv) return;
+
+            msgDiv.textContent = message;
+            msgDiv.className = '';
+            msgDiv.classList.add(type);
+            msgDiv.style.display = 'block';
+
+            setTimeout(() => {
+                msgDiv.style.display = 'none';
+            }, 5000);
+        }
+
+        // Wait for Auth module to load
+        function waitForAuth() {
+            return new Promise((resolve) => {
+                // Check if already loaded
+                if (window.AuthModule && window.AuthModule.login) {
+                    resolve(window.AuthModule);
+                    return;
+                }
+                if (window.Auth && window.Auth.login) {
+                    resolve(window.Auth);
+                    return;
+                }
+
+                const checkInterval = setInterval(() => {
+                    if (window.AuthModule && window.AuthModule.login) {
+                        clearInterval(checkInterval);
+                        resolve(window.AuthModule);
+                    } else if (window.Auth && window.Auth.login) {
+                        clearInterval(checkInterval);
+                        resolve(window.Auth);
+                    }
+                }, 50);
+
+                // Timeout after 5 seconds
+                setTimeout(() => {
+                    clearInterval(checkInterval);
+                    // Try to use window.Auth as fallback (from api-auth.js global export)
+                    if (window.Auth && window.Auth.login) {
+                        resolve(window.Auth);
+                    } else {
+                        resolve(null);
+                    }
+                }, 5000);
+            });
+        }
+
+        // ربط فورم تسجيل الدخول مع API الباكند
+        const loginFormEl = document.getElementById('login-form-element');
+
+        if (loginFormEl) {
+            loginFormEl.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const emailInput = document.getElementById('login-email');
+                const passwordInput = document.getElementById('login-password');
+
+                const email = emailInput ? emailInput.value.trim() : '';
+                const password = passwordInput ? passwordInput.value : '';
+
+                if (!email || !password) {
+                    showAuthMessage('يرجى إدخال البريد الإلكتروني وكلمة المرور', 'error');
+                    return;
+                }
+
+                try {
+                    // Wait for Auth module to load
+                    const Auth = await waitForAuth();
+
+                    if (!Auth || !Auth.login) {
+                        showAuthMessage('جاري تحميل النظام، يرجى المحاولة مرة أخرى', 'error');
+                        return;
+                    }
+
+                    const result = await Auth.login(email, password);
+
+                    showAuthMessage('تم تسجيل الدخول بنجاح! جاري التحويل...', 'success');
+
+                    // Get user info to determine redirect
+                    const user = result.user || (Auth.getUserInfo ? Auth.getUserInfo() : null);
+                    const userRole = user ? user.role : 'patient';
+
+                    // Store first login flag for welcome message
+                    if (user && user.first_login) {
+                        sessionStorage.setItem('show_welcome', 'true');
+                        sessionStorage.setItem('user_name', user.name || email.split('@')[0]);
+                    }
+
+                    setTimeout(() => {
+                        // Redirect based on role
+                        // Only admin goes directly to admin panel
+                        // All others (patients and doctors) go to home page
+                        if (userRole === 'admin') {
+                            window.location.href = '/admin-panel/';
+                        } else {
+                            // Patients and Doctors go to home page
+                            window.location.href = '/';
+                        }
+                    }, 800);
+                } catch (err) {
+                    console.error(err);
+                    const msg = (err && (err.detail || err.error)) || 'بيانات الدخول غير صحيحة أو الحساب غير مفعّل';
+                    showAuthMessage(msg, 'error');
+                }
+            });
+        }
+
+        // ربط نموذج إنشاء الحساب مع Register API في الباكند
+        const registerFormEl = document.getElementById('register-form-element');
+
+        if (registerFormEl) {
+            registerFormEl.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const nameInput = document.getElementById('register-fullname');
+                const emailInput = document.getElementById('register-email');
+                const passwordInput = document.getElementById('register-password');
+                const confirmPasswordInput = document.getElementById('confirm-password');
+                const roleInput = document.querySelector('input[name="account_type"]:checked');
+                const registerError = document.getElementById('register-error');
+
+                const fullName = nameInput ? nameInput.value.trim() : '';
+                const email = emailInput ? emailInput.value.trim() : '';
+                const password = passwordInput ? passwordInput.value : '';
+                const password2 = confirmPasswordInput ? confirmPasswordInput.value : '';
+                const role = roleInput ? roleInput.value : 'patient';
+
+                if (registerError) {
+                    registerError.classList.remove('show');
+                    registerError.textContent = '';
+                }
+
+                if (!fullName || !email || !password || !password2) {
+                    if (registerError) {
+                        registerError.textContent = 'يرجى تعبئة جميع الحقول المطلوبة';
+                        registerError.classList.add('show');
+                    }
+                    return;
+                }
+
+                if (password !== password2) {
+                    if (registerError) {
+                        registerError.textContent = 'كلمتا المرور غير متطابقتين';
+                        registerError.classList.add('show');
+                    }
+                    return;
+                }
+
+                // تقسيم الاسم الكامل إلى first_name و last_name بشكل مبسط
+                const parts = fullName.split(' ');
+                const first_name = parts[0] || '';
+                const last_name = parts.slice(1).join(' ');
+
+                try {
+                    // Wait for Auth module to load
+                    const Auth = await waitForAuth();
+
+                    if (!Auth || !Auth.register) {
+                        if (registerError) {
+                            registerError.textContent = 'جاري تحميل النظام، يرجى المحاولة مرة أخرى';
+                            registerError.classList.add('show');
+                        }
+                        return;
+                    }
+
+                    const payload = {
+                        username: email,
+                        email: email,
+                        first_name,
+                        last_name,
+                        password,
+                        password2,
+                        role,
+                    };
+
+                    const res = await Auth.register(payload);
+
+                    // التحقق من أن التسجيل يتطلب تأكيد البريد
+                    if (res && res.verification_required) {
+                        // توجيه المستخدم لصفحة التحقق من البريد
+                        window.location.href = `/email-check/?email=${encodeURIComponent(email)}`;
+                    } else {
+                        // في حالات نادرة (نظام قديم)
+                        const detail = res && (res.detail || (res.user && res.user.detail));
+                        showAuthMessage(detail || 'تم إنشاء الحساب. يرجى التحقق من بريدك الإلكتروني لتفعيل الحساب.', 'success');
+
+                        setTimeout(() => {
+                            switchTab('login');
+                        }, 1500);
+                    }
+                } catch (err) {
+                    console.error(err);
+                    let msg = 'تعذر إنشاء الحساب. يرجى التحقق من البيانات.';
+
+                    // محاولة استخراج رسائل أخطاء مفصلة من السيرلايزر
+                    if (err) {
+                        if (typeof err.detail === 'string') {
+                            msg = err.detail;
+                        } else if (err.email && Array.isArray(err.email)) {
+                            msg = err.email[0];
+                        } else if (err.username && Array.isArray(err.username)) {
+                            msg = err.username[0];
+                        } else if (err.password && Array.isArray(err.password)) {
+                            msg = err.password[0];
+                        }
+                    }
+
+                    if (registerError) {
+                        registerError.textContent = msg;
+                        registerError.classList.add('show');
+                    } else {
+                        showAuthMessage(msg, 'error');
+                    }
+                }
+            });
+        }
+
+        // ===== VERIFICATION MODAL FUNCTIONS =====
+        function showVerificationModal(email) {
+            const modal = document.getElementById('verification-modal');
+            const emailSpan = document.getElementById('modal-email-address');
+
+            if (!modal) return;
+
+            if (emailSpan) {
+                emailSpan.textContent = email;
+            }
+
+            // Show modal with animation
+            modal.classList.add('active');
+
+            // Prevent body scroll
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeVerificationModal() {
+            const modal = document.getElementById('verification-modal');
+            if (!modal) return;
+
+            modal.classList.remove('active');
+
+            // Re-enable body scroll
+            document.body.style.overflow = '';
+
+            // Switch to login tab after closing
+            setTimeout(() => {
+                switchTab('login');
+            }, 400);
+        }
+
+        // Close modal when clicking outside
+        document.addEventListener('click', (e) => {
+            const modal = document.getElementById('verification-modal');
+            if (e.target === modal) {
+                closeVerificationModal();
+            }
+        });
+
+        // Close modal with ESC key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeVerificationModal();
+            }
+        });
+    </script>
+
+    <!-- Verification Modal -->
+    <div id="verification-modal" class="modal-overlay">
+        <div class="verification-modal">
+            <div class="modal-header">
+                <div class="modal-icon">
+                    <i class="fas fa-envelope-open-text"></i>
+                </div>
+                <h2 class="modal-title">تحقق من بريدك الإلكتروني</h2>
+            </div>
+            <div class="modal-body">
+                <p>تم إرسال رابط التفعيل بنجاح إلى:</p>
+                <div class="modal-email">
+                    <i class="fas fa-envelope" style="margin-left: 0.5rem;"></i>
+                    <span id="modal-email-address">example@email.com</span>
+                </div>
+                <div class="modal-instructions">
+                    <ul>
+                        <li>افتح بريدك الإلكتروني</li>
+                        <li>ابحث عن رسالة من MyLabLink</li>
+                        <li>اضغط على رابط التفعيل</li>
+                        <li>ارجع وسجّل دخولك!</li>
+                    </ul>
+                </div>
+                <p class="modal-note">
+                    <i class="fas fa-clock" style="margin-left: 0.3rem;"></i>
+                    الرابط صالح لمدة 48 ساعة
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-modal-close" onclick="closeVerificationModal()">
+                    <i class="fas fa-check-circle" style="margin-left: 0.5rem;"></i>
+                    فهمت، شكراً
+                </button>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

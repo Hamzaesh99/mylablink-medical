@@ -1,0 +1,760 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الإشعارات — لوحة الطبيب</title>
+    <link rel="icon" type="image/x-icon" href="{% static 'images/logo.jpg' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&family=Cairo:wght@300;400;600;700;900&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Tajawal', 'Cairo', sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #FFB88C 0%, #B19CD9 35%, #6BA3D9 70%, #8BBCE6 100%);
+            background-attachment: fixed;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background Particles */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 20% 50%, rgba(255, 184, 140, 0.3), transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(177, 156, 217, 0.3), transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(107, 163, 217, 0.3), transparent 50%),
+                radial-gradient(circle at 60% 70%, rgba(139, 188, 230, 0.2), transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+            animation: floatParticles 25s ease-in-out infinite;
+        }
+
+        @keyframes floatParticles {
+
+            0%,
+            100% {
+                opacity: 0.4;
+                transform: translateY(0px) scale(1);
+            }
+
+            50% {
+                opacity: 0.7;
+                transform: translateY(-30px) scale(1.05);
+            }
+        }
+
+        .dash-grid {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 2rem;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border-radius: 2rem;
+            border: 2px solid rgba(255, 255, 255, 0.35);
+            padding: 2rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            height: fit-content;
+            position: sticky;
+            top: 2rem;
+            animation: fadeInLeft 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .main-area {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border-radius: 2rem;
+            border: 2px solid rgba(255, 255, 255, 0.35);
+            padding: 2.5rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            animation: fadeInUp 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(60px) scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Doctor Theme Profile */
+        .sidebar .profile {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 1.5rem;
+            margin-bottom: 2rem;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .sidebar .avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #00BFA5 0%, #00E5D0 50%, #64FFDA 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            box-shadow:
+                0 8px 20px rgba(0, 191, 165, 0.4),
+                inset 0 -2px 10px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+            border: 3px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .sidebar .avatar::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+
+            0%,
+            100% {
+                transform: translate(0, 0);
+                opacity: 0.5;
+            }
+
+            50% {
+                transform: translate(10px, 10px);
+                opacity: 0.8;
+            }
+        }
+
+        .sidebar .avatar i,
+        .sidebar .avatar img {
+            position: relative;
+            z-index: 2;
+        }
+
+        .sidebar a {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: #000000;
+            padding: 1rem 1.5rem;
+            border-radius: 1rem;
+            margin-bottom: 0.5rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-weight: 700;
+        }
+
+        .sidebar a:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(-5px);
+        }
+
+        .sidebar a.active {
+            background: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            color: white;
+            overflow: hidden;
+        }
+
+        .notification-item {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: start;
+            gap: 1rem;
+        }
+
+        .notification-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(-5px);
+        }
+
+        .notification-item:last-child {
+            border-bottom: none;
+        }
+
+        .notification-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .icon-info {
+            background: linear-gradient(135deg, #3B82F6, #2563EB);
+        }
+
+        .icon-success {
+            background: linear-gradient(135deg, #10B981, #059669);
+        }
+
+        .icon-warning {
+            background: linear-gradient(135deg, #F59E0B, #D97706);
+        }
+
+        .icon-error {
+            background: linear-gradient(135deg, #EF4444, #DC2626);
+        }
+
+        h2,
+        h3,
+        h4,
+        h5 {
+            color: #000000;
+            font-weight: 800;
+        }
+
+        .text-muted {
+            color: #2d2d2d !important;
+            font-weight: 600 !important;
+        }
+
+        .btn-refresh {
+            background: linear-gradient(135deg, #00BFA5 0%, #009688 100%);
+            border: none;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 1rem;
+            font-weight: 700;
+            box-shadow: 0 8px 20px rgba(0, 191, 165, 0.3);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .btn-refresh:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(0, 191, 165, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .dash-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: relative;
+                top: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    {% include 'partials/messages.html' %}
+    <div class="dash-grid">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="profile bounce-in">
+                <div class="avatar">
+                    <i class="bi bi-person-badge"></i>
+                </div>
+                <div style="flex: 1;">
+                    <div id="doctorName" style="
+                        font-weight: 900; 
+                        color: #000000;
+                        font-size: 1.1rem;
+                        margin-bottom: 0.25rem;
+                        text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                    ">جاري التحميل...</div>
+                    <div style="
+                        background: linear-gradient(135deg, #00BFA5 0%, #64FFDA 100%);
+                        color: white;
+                        font-size: 0.75rem;
+                        font-weight: 700;
+                        padding: 0.25rem 0.75rem;
+                        border-radius: 2rem;
+                        display: inline-block;
+                        box-shadow: 0 4px 15px rgba(0, 191, 165, 0.3);
+                    ">طبيب</div>
+                </div>
+            </div>
+
+            <nav class="sidebar-top">
+                <a href="dashboard_doctor.html" class="slide-in">
+                    <i class="bi bi-people"></i>
+                    <span>قائمة المرضى</span>
+                </a>
+
+                <a href="archive.html" class="slide-in" style="animation-delay: 0.2s;">
+                    <i class="bi bi-file-earmark-text"></i>
+                    <span>التقارير</span>
+                </a>
+                <a href="notifications_doctor.html" class="active slide-in" style="animation-delay: 0.3s;">
+                    <i class="bi bi-bell"></i>
+                    <span>الإشعارات</span>
+                    <span id="badgeCount" class="badge rounded-pill bg-danger"
+                        style="margin-right:auto; display:none;">0</span>
+                </a>
+                <a href="dashboard_doctor.html#statistics" class="slide-in" style="animation-delay: 0.4s;">
+                    <i class="bi bi-graph-up"></i>
+                    <span>الإحصائيات</span>
+                </a>
+                <a href="settings_doctor.html" class="slide-in" style="animation-delay: 0.5s;">
+                    <i class="bi bi-gear"></i>
+                    <span>الإعدادات</span>
+                </a>
+                <a href="/auth.html" class="slide-in" style="animation-delay: 0.6s;"
+                    onclick="event.preventDefault(); logout();">
+                    <i class="bi bi-box-arrow-left"></i>
+                    <span>الخروج</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <section class="main-area">
+            <div class="d-flex justify-content-between align-items-center mb-4 animate-up">
+                <div>
+                    <h2 class="mb-1">الإشعارات والتنبيهات</h2>
+                    <p class="text-muted">آخر التحديثات المتعلقة بالمرضى والمواعيد</p>
+                </div>
+                <button class="btn-refresh" onclick="fetchNotifications()">
+                    <i class="bi bi-arrow-clockwise"></i>
+                    تحديث
+                </button>
+            </div>
+
+            <div id="notificationsContainer" class="card animate-up"
+                style="min-height: 400px; display: flex; align-items: center; justify-content: center;">
+                <div class="text-center py-5">
+                    <div class="spinner-border text-light" role="status" id="loadingSpinner">
+                        <span class="visually-hidden">جاري التحميل...</span>
+                    </div>
+                    <div id="emptyState" style="display: none;">
+                        <div class="mb-4" style="position: relative; display: inline-block;">
+                            <div style="
+                                width: 120px;
+                                height: 120px;
+                                background: linear-gradient(135deg, #00BFA5 0%, #009688 100%);
+                                border-radius: 50%;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                box-shadow: 0 15px 40px rgba(0, 191, 165, 0.4);
+                                position: relative;
+                                z-index: 2;
+                            ">
+                                <i class="bi bi-bell-slash" style="font-size: 3.5rem; color: white;"></i>
+                            </div>
+                        </div>
+                        <h3 class="mb-3" style="color:#00BFA5;">لا توجد إشعارات جديدة</h3>
+                        <p class="text-muted" style="max-width: 400px; margin: 0 auto;">جميع التنبيهات المتعلقة بالحالات
+                            الحرجة، نتائج التحاليل، والمواعيد ستظهر هنا.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="notificationsList" class="card animate-up" style="display: none;">
+                <!-- Filled dynamically -->
+            </div>
+        </section>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        const API_BASE = 'http://127.0.0.1:8000';
+        const USER_KEY = 'mylab_user';
+        const TOKEN_KEY = 'mylab_tokens';
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Auto-refresh notifications every 30s to check for new messages/play sound
+            setInterval(() => {
+                const tokens = localStorage.getItem(TOKEN_KEY);
+                if (tokens) {
+                    const accessToken = JSON.parse(tokens).access;
+                    fetchNotifications({ 'Authorization': `Bearer ${accessToken}` });
+                }
+            }, 30000);
+
+            // 1. Auth Check & User Info
+            const user = recoverUserInfo();
+            if (!user) {
+                window.location.href = 'auth.html';
+                return;
+            }
+
+            // Display User Info Placeholder
+            document.getElementById('doctorName').textContent = user.name || user.username || 'طبيب';
+
+            // 2. Fetch Profile & Notifications
+            await loadData();
+        });
+
+        async function loadData() {
+            try {
+                const token = JSON.parse(localStorage.getItem(TOKEN_KEY)).access;
+                const headers = { 'Authorization': `Bearer ${token}` };
+
+                // A. Fetch Me Profile
+                try {
+                    const meResponse = await fetch(`${API_BASE}/api/accounts/me/`, { headers });
+                    if (meResponse.ok) {
+                        const meData = await meResponse.json();
+                        const realName = (meData.first_name && meData.last_name)
+                            ? `${meData.first_name} ${meData.last_name}`
+                            : (meData.first_name || meData.username);
+
+                        document.getElementById('doctorName').textContent = realName;
+
+                        const avatarContainer = document.querySelector('.sidebar .avatar');
+                        if (avatarContainer && meData.avatar) {
+                            avatarContainer.innerHTML = `<img src="${meData.avatar}" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">`;
+                        } else if (avatarContainer) {
+                            const name = meData.first_name || meData.username || 'Doctor';
+                            const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=00BFA5&color=fff`;
+                            avatarContainer.innerHTML = `<img src="${avatarUrl}" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">`;
+                        }
+                    }
+                } catch (e) { console.error('Profile fetch error', e); }
+
+                // B. Fetch Notifications
+                await fetchNotifications(headers);
+
+            } catch (e) {
+                console.error('Data load error', e);
+            }
+        }
+
+        async function fetchNotifications(headers = null) {
+            const container = document.getElementById('notificationsContainer');
+            const listCard = document.getElementById('notificationsList');
+            const spinner = document.getElementById('loadingSpinner');
+            const emptyState = document.getElementById('emptyState');
+
+            if (!headers) {
+                const token = JSON.parse(localStorage.getItem(TOKEN_KEY)).access;
+                headers = { 'Authorization': `Bearer ${token}` };
+            }
+
+            spinner.style.display = 'block';
+            emptyState.style.display = 'none';
+            container.style.display = 'flex';
+            container.style.minHeight = '400px';
+            listCard.style.display = 'none';
+
+            try {
+                const response = await fetch(`${API_BASE}/api/notifications/`, { headers });
+                if (response.ok) {
+                    const data = await response.json();
+                    const notifications = Array.isArray(data) ? data : (data.results || []);
+
+                    // Check for new unread messages to play sound
+                    const unreadCount = notifications.filter(n => !n.is_read).length;
+                    const lastCount = parseInt(sessionStorage.getItem('last_notif_count') || '0');
+
+                    if (unreadCount > lastCount) {
+                        try {
+                            const audio = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3');
+                            audio.play().catch(e => console.log('Audio autoplay blocked', e));
+                        } catch (e) { console.log(e); }
+                    }
+                    sessionStorage.setItem('last_notif_count', unreadCount);
+
+                    if (notifications.length > 0) {
+                        renderNotifications(notifications);
+                        container.style.display = 'none'; // Hide empty/loading container
+                        listCard.style.display = 'block';
+
+                        // Update badge
+                        const badge = document.getElementById('badgeCount');
+                        badge.textContent = notifications.length;
+                        badge.style.display = 'inline-block';
+                    } else {
+                        // Empty
+                        spinner.style.display = 'none';
+                        emptyState.style.display = 'block';
+                    }
+                } else {
+                    throw new Error('Failed to fetch');
+                }
+            } catch (e) {
+                console.error('Notifications fetch failed', e);
+                // Fallback to empty state
+                spinner.style.display = 'none';
+                emptyState.style.display = 'block';
+            }
+        }
+
+        function renderNotifications(items) {
+            const listCard = document.getElementById('notificationsList');
+            listCard.innerHTML = items.map(item => {
+                // Determine icon based on title or content
+                let icon = 'bell';
+                let colorClass = 'info';
+
+                if ((item.title && item.title.includes('رسالة')) || (item.message && item.message.includes('رسالة'))) {
+                    icon = 'chat-dots';
+                    colorClass = 'warning';
+                } else if (item.title && item.title.includes('نتيجة')) {
+                    icon = 'file-earmark-medical';
+                    colorClass = 'success';
+                } else if (item.title && item.title.includes('حرج')) {
+                    icon = 'exclamation-triangle';
+                    colorClass = 'error';
+                }
+
+                // Extract sender ID - try both sender and sender_id
+                const senderId = item.sender_id || item.sender || '';
+
+                // Escape quotes in text for onclick
+                const safeTitle = (item.title || 'إشعار جديد').replace(/'/g, "\\'");
+                const safeMessage = (item.message || '').replace(/'/g, "\\'");
+
+                return `
+                <div class="notification-item" onclick="viewNotificationAction(${item.id}, '${safeTitle}', '${safeMessage}', ${senderId || 'null'})" style="cursor: pointer;">
+                    <div class="notification-icon icon-${colorClass}">
+                        <i class="bi bi-${icon}"></i>
+                    </div>
+                    <div>
+                        <h5 class="mb-1">${item.title || 'إشعار جديد'}</h5>
+                        <p class="mb-1 text-light">${item.message || ''}</p>
+                        <small class="text-white-50">${new Date(item.created_at || Date.now()).toLocaleString('ar-LY')}</small>
+                    </div>
+                </div>
+                `;
+            }).join('');
+        }
+
+        async function viewNotificationAction(id, title, message, senderId) {
+            // Check if it's a message notification
+            const isMessage = (title && title.includes('رسالة')) || (message && message.includes('رسالة'));
+
+            if (isMessage && senderId && senderId !== 'null') {
+                const { value: replyText } = await Swal.fire({
+                    title: 'الرد على الرسالة',
+                    html: `
+                        <div style="text-align: right; direction: rtl;">
+                            <h5 style="color: #333; margin-bottom: 1rem;">${title}</h5>
+                            <p style="background: #f1f1f1; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1rem;">${message}</p>
+                        </div>
+                    `,
+                    input: 'textarea',
+                    inputLabel: 'اكتب ردك هنا:',
+                    inputPlaceholder: 'مثال: شكراً على استفسارك، سيتم الرد في أقرب وقت...',
+                    inputAttributes: {
+                        'aria-label': 'اكتب ردك',
+                        'style': 'min-height: 100px; text-align: right; direction: rtl;'
+                    },
+                    showCancelButton: true,
+                    confirmButtonText: '<i class="bi bi-send"></i> إرسال الرد',
+                    cancelButtonText: '<i class="bi bi-x"></i> إغلاق',
+                    confirmButtonColor: '#00BFA5',
+                    cancelButtonColor: '#6c757d',
+                    customClass: {
+                        popup: 'rtl-popup'
+                    },
+                    preConfirm: (text) => {
+                        if (!text || text.trim() === '') {
+                            Swal.showValidationMessage('الرجاء كتابة رد قبل الإرسال');
+                            return false;
+                        }
+                        return text;
+                    }
+                });
+
+                if (replyText) {
+                    // Show loading
+                    Swal.fire({
+                        title: 'جاري الإرسال...',
+                        html: 'الرجاء الانتظار',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+
+                    try {
+                        const token = JSON.parse(localStorage.getItem(TOKEN_KEY) || '{}').access;
+
+                        // Send message API
+                        const response = await fetch(`${API_BASE}/api/messages/`, {
+                            method: 'POST',
+                            headers: {
+                                'Authorization': `Bearer ${token}`,
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                receiver: parseInt(senderId), // The sender of the notification is the receiver of the reply
+                                content: replyText.trim()
+                            })
+                        });
+
+                        if (response.ok) {
+                            await Swal.fire({
+                                icon: 'success',
+                                title: 'تم الإرسال بنجاح!',
+                                text: 'تم إرسال ردك للمريض',
+                                confirmButtonText: 'حسناً',
+                                confirmButtonColor: '#00BFA5'
+                            });
+
+                            // Refresh notifications to update list
+                            await fetchNotifications();
+                        } else {
+                            const errorData = await response.json().catch(() => ({}));
+                            throw new Error(errorData.detail || errorData.error || 'فشل الإرسال');
+                        }
+                    } catch (e) {
+                        console.error('Reply error:', e);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'خطأ في الإرسال',
+                            text: e.message || 'حدث خطأ أثناء إرسال الرد. الرجاء المحاولة مرة أخرى',
+                            confirmButtonText: 'حسناً',
+                            confirmButtonColor: '#dc3545'
+                        });
+                    }
+                }
+            } else if (isMessage) {
+                // Fallback if no sender ID - provide helpful guidance
+                Swal.fire({
+                    icon: 'info',
+                    title: 'تنبيه',
+                    html: `
+                        <div style="text-align: right; direction: rtl;">
+                            <p style="margin-bottom: 1rem;">${message}</p>
+                            <p style="color: #666;">لا يمكن الرد مباشرة من هنا بسبب عدم توفر معلومات المرسل.</p>
+                            <p style="color: #00BFA5; font-weight: bold;">يرجى الذهاب لصفحة الرسائل للرد</p>
+                        </div>
+                    `,
+                    confirmButtonText: 'الذهاب للرسائل',
+                    showCancelButton: true,
+                    cancelButtonText: 'إغلاق',
+                    confirmButtonColor: '#00BFA5'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = 'messages_doctor.html';
+                    }
+                });
+            } else {
+                // Info only notification
+                Swal.fire({
+                    title: title,
+                    html: `<div style="text-align: right; direction: rtl;">${message}</div>`,
+                    icon: 'info',
+                    confirmButtonText: 'حسناً',
+                    confirmButtonColor: '#00BFA5'
+                });
+            }
+
+            // Mark notification as read
+            markNotificationAsRead(id);
+        }
+
+        async function markNotificationAsRead(notificationId) {
+            try {
+                const token = JSON.parse(localStorage.getItem(TOKEN_KEY) || '{}').access;
+                await fetch(`${API_BASE}/api/notifications/${notificationId}/mark_as_read/`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                // Silently mark as read, refresh in background
+                setTimeout(() => fetchNotifications(), 1000);
+            } catch (e) {
+                console.log('Mark as read failed:', e);
+            }
+        }
+
+        function getIconForLevel(level) {
+            if (level === 'success') return 'check-circle';
+            if (level === 'warning') return 'exclamation-triangle';
+            if (level === 'error' || level === 'critical') return 'x-circle';
+            return 'info-circle';
+        }
+
+        function recoverUserInfo() {
+            const stored = localStorage.getItem(USER_KEY);
+            if (stored) return JSON.parse(stored);
+            return null;
+        }
+
+        function logout() {
+            Swal.fire({
+                title: 'تسجيل الخروج',
+                text: 'هل أنت متأكد؟',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'نعم',
+                cancelButtonText: 'إلغاء',
+                confirmButtonColor: '#d33',
+            }).then((res) => {
+                if (res.isConfirmed) {
+                    localStorage.removeItem(TOKEN_KEY);
+                    window.location.href = 'auth.html';
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>
