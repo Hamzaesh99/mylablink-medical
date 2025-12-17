@@ -8,6 +8,9 @@ cd backend
 
 # Install Python dependencies
 echo "Installing Python dependencies..."
+echo "Current directory: $(pwd)"
+echo "Listing files in current directory:"
+ls -la
 pip install -r requirements.txt
 
 # Install additional Render-specific requirements
