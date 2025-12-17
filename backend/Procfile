@@ -1,0 +1,1 @@
+web: gunicorn mylablink_python.wsgi --log-file -

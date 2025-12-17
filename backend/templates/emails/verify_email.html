@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>تفعيل الحساب — MyLabLink</title>
+  <style>
+    :root {
+      --primary-1: #0B3B91;
+      --primary-2: #2D7DFF;
+      --btn-red: #EF4444;
+      --btn-red-dark: #D52F2F;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: #f4f6fb;
+      font-family: Tahoma, Arial, sans-serif;
+      color: #0f172a;
+    }
+
+    .container {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(11, 59, 145, .08);
+      overflow: hidden;
+    }
+
+    .header {
+      background: linear-gradient(90deg, var(--primary-1), var(--primary-2));
+      padding: 28px;
+      color: #fff;
+      text-align: center;
+    }
+
+    .brand {
+      font-weight: 900;
+      font-size: 24px;
+      letter-spacing: .4px;
+    }
+
+    .content {
+      padding: 28px;
+      line-height: 1.9;
+      font-size: 16px;
+    }
+
+    .cta {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--btn-red), var(--btn-red-dark));
+      color: #fff !important;
+      text-decoration: none;
+      padding: 12px 20px;
+      border-radius: 999px;
+      font-weight: 800;
+    }
+
+    .muted {
+      color: #64748b;
+      font-size: 13px;
+    }
+
+    .footer {
+      padding: 20px;
+      text-align: center;
+      color: #94a3b8;
+      font-size: 12px;
+    }
+
+    a {
+      color: var(--primary-2);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="card">
+      <div class="header">
+        <div class="brand">MyLabLink</div>
+      </div>
+      <div class="content">
+        <p>مرحباً {{ user.first_name|default:user.username }},</p>
+        <p>
+          شكراً لتسجيلك في <strong>MyLabLink</strong>.
+          لإتمام عملية التسجيل وتفعيل حسابك، يرجى الضغط على الزر التالي:
+        </p>
+        <p style="text-align:center; margin:28px 0;">
+          <a class="cta" href="{{ verify_url }}" target="_blank" rel="noopener">تفعيل الحساب</a>
+        </p>
+        <p class="muted">
+          إذا لم يعمل الزر أعلاه، انسخ الرابط التالي والصقه في شريط المتصفح:
+          <br>
+          <a href="{{ verify_url }}" target="_blank" rel="noopener">{{ verify_url }}</a>
+        </p>
+        <p class="muted">ينتهي الرابط خلال 48 ساعة حفاظاً على الأمان.</p>
+        <p>مع خالص التحية،<br>فريق MyLabLink</p>
+      </div>
+      <div class="footer">© MyLabLink. جميع الحقوق محفوظة.</div>
+    </div>
+  </div>
+</body>
+
+</html>
