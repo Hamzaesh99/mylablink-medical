@@ -69,7 +69,7 @@
 
 ```env
 # Django Settings
-DJANGO_SECRET_KEY=<سيتم توليدها تلقائياً>
+DJANGO_SECRET_KEY=$cw^plkzxj*hyg0oq5p6xx9+8)e!rne$0sqsc)i%y@-rm(n^0g
 DEBUG=False
 DJANGO_SETTINGS_MODULE=mylablink_python.settings_production
 PYTHON_VERSION=3.11.0
@@ -78,7 +78,7 @@ PYTHON_VERSION=3.11.0
 ALLOWED_HOSTS=.onrender.com,127.0.0.1,localhost
 
 # Database (سيتم ربطها تلقائياً من خلال render.yaml)
-DATABASE_URL=<سيتم ربطها من قاعدة البيانات>
+DATABASE_URL=postgresql://mylablink_user:hAtziVWFJD5sv1cfneieepGRTzy9yTEk@dpg-d518q1vfte5s73908v60-a.frankfurt-postgres.render.com/mylablink_db_aqx5
 
 # Security
 SECURE_SSL_REDIRECT=True
